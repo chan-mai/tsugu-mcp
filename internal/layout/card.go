@@ -11,31 +11,32 @@ type card struct {
 }
 
 // 人物情報から表示行を生成(詳細は続柄行の上、死亡日は下)
-func (l *layouter) buildCard(p person) card {
-	var above []string
+// lower=夫婦の下側(配偶者)。婚姻二重線が文字を貫かないよう続柄行を先頭にし詳細を下へ反転
+func (l *layouter) buildCard(p person, lower bool) card {
+	var details []string
 	if p.applicant {
-		above = append(above, "(申立人)")
+		details = append(details, "(申立人)")
 	}
 	if p.isDecedent {
 		if p.address != "" {
-			above = append(above, "最後の住所", "　"+p.address)
+			details = append(details, "最後の住所", "　"+p.address)
 		}
 		if p.honseki != "" {
-			above = append(above, "最後の本籍", "　"+p.honseki)
+			details = append(details, "最後の本籍", "　"+p.honseki)
 		}
 		// 被相続人の出生・死亡は改行せずスペース併記
 		if !p.birth.IsZero() {
-			above = append(above, "出生　"+l.fmtDate(p.birth))
+			details = append(details, "出生　"+l.fmtDate(p.birth))
 		}
 		if p.death != nil {
-			above = append(above, "死亡　"+l.fmtDate(*p.death))
+			details = append(details, "死亡　"+l.fmtDate(*p.death))
 		}
 	} else {
 		if p.address != "" {
-			above = append(above, "住所", "　"+p.address)
+			details = append(details, "住所", "　"+p.address)
 		}
 		if !p.birth.IsZero() {
-			above = append(above, "出生", "　"+l.fmtDate(p.birth))
+			details = append(details, "出生", "　"+l.fmtDate(p.birth))
 		}
 	}
 
@@ -47,12 +48,15 @@ func (l *layouter) buildCard(p person) card {
 		anchor += " " + tag
 	}
 
-	var below []string
+	var death []string
 	if !p.isDecedent && p.death != nil {
-		below = append(below, l.fmtDate(*p.death)+"　死亡")
+		death = append(death, l.fmtDate(*p.death)+"　死亡")
 	}
 
-	return l.makeCard(above, anchor, below)
+	if lower {
+		return l.makeCard(nil, anchor, append(details, death...))
+	}
+	return l.makeCard(details, anchor, death)
 }
 
 func (l *layouter) makeCard(above []string, anchor string, below []string) card {

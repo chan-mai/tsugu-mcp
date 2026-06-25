@@ -58,10 +58,10 @@ func Build(doc family.Document, st Style, m Measurer) scene.Scene {
 // ノードの部分木を横型配置し、局所座標(y上端=0)のシーン・接続点Y・高さを返却
 func (l *layouter) hlayout(n *treeNode, depth int) (scene.Scene, float64, float64) {
 	colX := l.columnX[depth]
-	pc := l.buildCard(n.primary)
+	pc := l.buildCard(n.primary, false)
 	var sc *card
 	if n.spouse != nil {
-		c := l.buildCard(*n.spouse)
+		c := l.buildCard(*n.spouse, true)
 		sc = &c
 	}
 
@@ -163,9 +163,9 @@ func (l *layouter) computeColumns(root *treeNode) {
 	maxW := map[int]float64{}
 	var walk func(n *treeNode, d int)
 	walk = func(n *treeNode, d int) {
-		w := l.buildCard(n.primary).width
+		w := l.buildCard(n.primary, false).width
 		if n.spouse != nil {
-			if sw := l.buildCard(*n.spouse).width; sw > w {
+			if sw := l.buildCard(*n.spouse, true).width; sw > w {
 				w = sw
 			}
 		}
