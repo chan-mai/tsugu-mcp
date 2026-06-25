@@ -1,0 +1,31 @@
+{
+  "decedent": {
+    "name": "山田 太郎",
+    "registeredDomicile": "東京都千代田区丸の内一丁目1番",
+    "lastAddress": "東京都千代田区丸の内一丁目1番1号",
+    "birthDate": "1985-01-02",
+    "deathDate": "2025-03-15"
+  },
+  "spouse": {
+    "name": "山田 花子",
+    "relationship": "妻",
+    "birthDate": "1987-05-05",
+    "outcome": "inherit"
+  },
+  "ascendants": [
+    {
+      "name": "山田 一",
+      "relationship": "父",
+      "birthDate": "1955-02-02",
+      "outcome": "inherit"
+    },
+    {
+      "name": "山田 春",
+      "relationship": "母",
+      "birthDate": "1958-03-03",
+      "outcome": "inherit"
+    }
+  ],
+  "preparer": { "name": "司法書士 鈴木 一" },
+  "preparedAt": "2026-06-26"
+}
