@@ -1,8 +1,9 @@
 # tsugu-mcp
 
-相続手続き書類をGoで生成するツール。A4縦1ページの**相続関係説明図**を、JSONからPDF出力する。
+相続手続き書類をGoで生成するツール。JSONから次のPDFを出力する。日付は和暦表示(`-era`で切替)。
 
-体裁は実務の伝統的様式に準拠する: 左→右の横型家系図、人物は枠で囲わず`(続柄)　氏名`で表記、婚姻は縦の二重線、親子はブラケット線。日付は和暦表示。被相続人の左に詳細(最後の住所・本籍・出生・死亡)、左下に作成日・作成者、右下に「以下余白」。
+- **相続関係説明図**(1ページ): 左→右の横型家系図、人物は枠で囲わず`(続柄)　氏名`で表記、婚姻は縦の二重線、親子はブラケット線。被相続人の左に詳細(最後の住所・本籍・出生・死亡)、左下に作成日・作成者、右下に「以下余白」。
+- **相続登記申請書**(所有権移転・複数ページ): 1枚目上部に受付番号表用の破線枠、登記の目的・原因・相続人・申請人(複数+持分)・添付情報・申請日・課税価格・登録免許税、続いて不動産の表示(土地/建物)を流し込み。件数が多い場合は自動でページ送り。
 
 ## 使い方
 
@@ -11,9 +12,12 @@
 ```sh
 go build -o tsugu ./cmd/tsugu
 
-./tsugu -in testdata/sample_full.json -out chart.pdf      # ファイル
-./tsugu -era both < family.json > chart.pdf                # 標準入出力 / 西暦併記
+./tsugu chart -in testdata/sample_full.json  -out chart.pdf   # 相続関係説明図
+./tsugu touki -in testdata/touki_sample.json -out touki.pdf   # 相続登記申請書
+./tsugu chart -era both < family.json > chart.pdf             # 標準入出力 / 西暦併記
 ```
+
+サブコマンド `chart`(相続関係説明図) / `touki`(相続登記申請書)。各々共通フラグ:
 
 | フラグ | 既定 | 内容 |
 |--------|------|------|
@@ -24,12 +28,13 @@ go build -o tsugu ./cmd/tsugu
 ### ライブラリ
 
 ```go
-pdf, err := relationchart.GenerateFromJSON(data, relationchart.DefaultOptions())
-// もしくはモデルから直接
-pdf, err := relationchart.Generate(doc, relationchart.Options{Era: relationchart.EraWareki})
+// 相続関係説明図
+pdf, err := relationchart.GenerateFromJSON(chartJSON, relationchart.DefaultOptions())
+// 相続登記申請書
+pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions())
 ```
 
-## 入力JSON
+## 入力JSON(相続関係説明図)
 
 人物は所属(spouse / children / descendants / ascendants / siblings)とネストで関係を表す。各 children/siblings ノードは自分の `spouse` と `descendants`(代襲)を持てる。
 
@@ -67,24 +72,56 @@ pdf, err := relationchart.Generate(doc, relationchart.Options{Era: relationchart
 - `ascendants` があると尊属を根とし、被相続人と `siblings` をその子として描く。
 - 本ツールは与えられた家族構成を作図するレンダラに徹し、**法定相続人や相続分の算定は行わない**。
 
+## 入力JSON(相続登記申請書)
+
+登記の目的は「所有権移転」固定のためJSONに無い。`applicants`は複数+持分、`properties`は土地/建物を混在可。件数が多いと自動でページ送り。
+
+```jsonc
+{
+  "causes": [                                  // 原因(数次相続で複数併記)
+    { "date": "2020-03-10", "text": "山田太郎相続" }, { "date": "2024-06-15", "text": "相続" }
+  ],
+  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" },
+  "applicants": [
+    { "name": "山田 花子", "address": "東京都新宿区西新宿二丁目2番2号", "share": "2分の1",
+      "nameKana": "やまだ はなこ", "birthDate": "1950-05-05",
+      "email": "hanako@example.com", "phone": "090-0000-0000", "contact": true },
+    { "name": "山田 次郎", "address": "神奈川県横浜市中区本町三丁目3番3号", "share": "2分の1" }
+  ],
+  "attachments": ["登記原因証明情報", "住所証明情報"],   // 改行+インデントで列挙
+  "declineIdInfo": false,                       // 登記識別情報の通知欄(常に表示): false=□ / true=☑
+  "applicationDate": "2024-12-10", "registry": "東京法務局",
+  "taxValue": "0", "registrationTax": "0",
+  "properties": [
+    { "kind": "land",     "number": "...", "location": "...", "lotNumber": "1番", "landCategory": "宅地", "area": "123.45" },
+    { "kind": "building", "number": "...", "location": "...", "houseNumber": "1番1",
+      "buildingType": "居宅", "structure": "木造2階建", "floorArea": "1階 60.00平方メートル" }
+  ]
+}
+```
+
+- `kind`: `land`(土地: 地番/地目/地積) / `building`(建物: 家屋番号/種類/構造/床面積)。
+- `contact: true` の申請人に氏名ふりがな・生年月日(西暦)・メールの枠表と連絡先電話を付す。
+- 課税価格・登録免許税・地積等は表示文字列。本ツールは算定せず忠実描画。
+
 ## 設計
 
-データを一方向に流す層構造とし、各層を描画ライブラリ非依存で単体テスト可能にしている。
+データを一方向に流す層構造とし、各層を描画ライブラリ非依存で単体テスト可能にしている。2書類は中間表現と描画を共有し、モデル・JSON境界・レイアウトを書類ごとに分離する。
 
 ```
-JSON ─[inputjson]→ family.Document ─[layout]→ scene.Scene ─[render]→ PDF
-      DTO境界          ドメインモデル     純粋な幾何      Canvas越し描画
+相続関係説明図:  JSON ─[inputjson]→ family.Document  ─[layout]───→ scene.Scene    ─┐
+相続登記申請書:  JSON ─[reginput]──→ touki.Application ─[reglayout]→ []scene.Scene  ─┤─[render]→ PDF
+共有: ymd / wareki / scene / render
 ```
 
 | パッケージ | 責務 |
 |------------|------|
-| `family` | 入力ドメインモデルと意味的検証。描画・JSON非依存 |
-| `internal/inputjson` | JSONとモデルの境界。日付書式・列挙語彙の解釈 |
+| `ymd` | 年月日Dateと解析(全書類で共有) |
 | `internal/wareki` | 西暦→和暦変換(元号テーブル駆動の純粋関数) |
 | `internal/scene` | 描画指示の中間表現(枠・線・ラベル, mm座標) |
-| `internal/layout` | モデル→Scene。横型ツリー配置とAutoFit。`Measurer`で文字幅を注入 |
-| `internal/render` | Scene→PDF。`Canvas`インターフェースでgopdf依存を隔離 |
-| `relationchart` | 公開API。CLI・将来のMCPサーバーが共通利用 |
+| `internal/render` | Scene→PDF。`Canvas`でgopdf依存を隔離。`ToPDFMulti`で複数ページ |
+| `family` / `internal/inputjson` / `internal/layout` / `relationchart` | 相続関係説明図: モデル / JSON境界 / 横型ツリー配置 / 公開API |
+| `touki` / `internal/reginput` / `internal/reglayout` / `registration` | 相続登記申請書: モデル / JSON境界 / 流し込み+ページ送り / 公開API |
 
 レイアウトは Document を1本の家系ツリー(`tree.go`)へ変換し、左→右へ世代を列に割り当てて配置する。人物は枠なしカード(`card.go`)、関係線は縦の婚姻二重線と親子ブラケット。純粋な幾何計算のため `HeuristicMeasurer` で実フォント無しに座標を検証でき、描画は `Canvas` 抽象越しのためフェイクで呼び出しを検証できる。
 

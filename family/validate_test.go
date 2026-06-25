@@ -5,10 +5,12 @@ import (
 	"testing"
 )
 
+func d(y, m, day int) Date { return Date{Year: y, Month: m, Day: day} }
+
 func TestValidate_OK(t *testing.T) {
 	doc := Document{
-		Decedent: Decedent{Name: "甲", BirthDate: Date{1950, 1, 1}, DeathDate: Date{2025, 1, 1}},
-		Children: []*Node{{Person: Person{Name: "乙", BirthDate: Date{1980, 5, 5}}}},
+		Decedent: Decedent{Name: "甲", BirthDate: d(1950, 1, 1), DeathDate: d(2025, 1, 1)},
+		Children: []*Node{{Person: Person{Name: "乙", BirthDate: d(1980, 5, 5)}}},
 	}
 	if err := doc.Validate(); err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -23,7 +25,7 @@ func TestValidate_Errors(t *testing.T) {
 	}{
 		{
 			"氏名なし",
-			Document{Decedent: Decedent{DeathDate: Date{2025, 1, 1}}},
+			Document{Decedent: Decedent{DeathDate: d(2025, 1, 1)}},
 			"被相続人: name is required",
 		},
 		{
@@ -33,12 +35,12 @@ func TestValidate_Errors(t *testing.T) {
 		},
 		{
 			"死亡が出生より前",
-			Document{Decedent: Decedent{Name: "甲", BirthDate: Date{2025, 1, 1}, DeathDate: Date{2000, 1, 1}}},
+			Document{Decedent: Decedent{Name: "甲", BirthDate: d(2025, 1, 1), DeathDate: d(2000, 1, 1)}},
 			"death date is before birth date",
 		},
 		{
 			"相続人の氏名なし",
-			Document{Decedent: Decedent{Name: "甲", DeathDate: Date{2025, 1, 1}}, Children: []*Node{{}}},
+			Document{Decedent: Decedent{Name: "甲", DeathDate: d(2025, 1, 1)}, Children: []*Node{{}}},
 			"子: name is required",
 		},
 	}

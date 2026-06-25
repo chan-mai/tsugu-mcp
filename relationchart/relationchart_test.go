@@ -11,7 +11,7 @@ import (
 
 // testdata各サンプルが公開API経由でPDF化されるか確認(end-to-end)
 func TestGenerateFromJSON_Samples(t *testing.T) {
-	samples, err := filepath.Glob("../testdata/*.json")
+	samples, err := filepath.Glob("../testdata/sample_*.json")
 	if err != nil {
 		t.Fatal(err)
 	}

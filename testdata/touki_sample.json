@@ -1,0 +1,49 @@
+{
+  "causes": [
+    { "date": "2020-03-10", "text": "山田太郎相続" },
+    { "date": "2024-06-15", "text": "相続" }
+  ],
+  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" },
+  "applicants": [
+    {
+      "name": "山田 花子",
+      "address": "東京都新宿区西新宿二丁目2番2号",
+      "share": "2分の1",
+      "nameKana": "やまだ はなこ",
+      "birthDate": "1950-05-05",
+      "email": "hanako@example.com",
+      "phone": "090-0000-0000",
+      "contact": true
+    },
+    {
+      "name": "山田 次郎",
+      "address": "神奈川県横浜市中区本町三丁目3番3号",
+      "share": "2分の1"
+    }
+  ],
+  "attachments": ["登記原因証明情報", "住所証明情報"],
+  "declineIdInfo": false,
+  "applicationDate": "2024-12-10",
+  "registry": "東京法務局",
+  "taxValue": "0",
+  "registrationTax": "0",
+  "properties": [
+    {
+      "kind": "land",
+      "number": "0100000000001",
+      "location": "東京都千代田区一番町1番",
+      "lotNumber": "1番",
+      "landCategory": "宅地",
+      "area": "123.45"
+    },
+    {
+      "kind": "building",
+      "number": "0100000000002",
+      "location": "東京都千代田区一番町1番地1",
+      "houseNumber": "1番1",
+      "buildingType": "居宅",
+      "structure": "木造かわらぶき2階建",
+      "floorArea": "1階 60.00平方メートル 2階 45.00平方メートル"
+    }
+  ]
+}

@@ -11,20 +11,29 @@ import (
 
 const fontName = "ipaexg"
 
-// scene.SceneをA4縦のPDFバイト列へ描画
+// scene.SceneをA4縦1ページのPDFバイト列へ描画
 func ToPDF(s scene.Scene) ([]byte, error) {
-	pdf, err := newDoc()
+	return ToPDFMulti([]scene.Scene{s})
+}
+
+// 複数sceneをページごとにA4縦PDFへ描画
+func ToPDFMulti(pages []scene.Scene) ([]byte, error) {
+	pdf, err := startDoc()
 	if err != nil {
 		return nil, err
 	}
-	Draw(s, &gopdfCanvas{pdf: pdf})
+	c := &gopdfCanvas{pdf: pdf}
+	for _, s := range pages {
+		pdf.AddPage()
+		Draw(s, c)
+	}
 	return pdf.GetBytesPdf(), nil
 }
 
-func newDoc() (*gopdf.GoPdf, error) {
+// Start+フォント読込のみ(ページ追加は呼び出し側)
+func startDoc() (*gopdf.GoPdf, error) {
 	pdf := &gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{Unit: gopdf.UnitMM, PageSize: *gopdf.PageSizeA4})
-	pdf.AddPage()
 	if err := pdf.AddTTFFontData(fontName, assets.IPAexGothic); err != nil {
 		return nil, fmt.Errorf("failed to load font: %w", err)
 	}
@@ -43,11 +52,11 @@ func (c *gopdfCanvas) Rect(x, y, w, h float64) {
 	c.pdf.RectFromUpperLeftWithStyle(x, y, w, h, "D")
 }
 
-func (c *gopdfCanvas) Line(x1, y1, x2, y2, width float64, dashed bool) {
-	c.pdf.SetStrokeColor(0, 0, 0)
+func (c *gopdfCanvas) Line(x1, y1, x2, y2, width float64, dashed bool, color scene.RGB) {
+	c.pdf.SetStrokeColor(color.R, color.G, color.B)
 	c.pdf.SetLineWidth(width)
 	if dashed {
-		c.pdf.SetLineType("dashed")
+		c.pdf.SetCustomLineType([]float64{1.0, 1.0}, 0) // 細かい破線
 	} else {
 		c.pdf.SetLineType("solid")
 	}
@@ -83,10 +92,11 @@ type Measurer struct {
 
 // 描画と同一フォントで採寸するMeasurerを生成
 func NewMeasurer() (*Measurer, error) {
-	pdf, err := newDoc()
+	pdf, err := startDoc()
 	if err != nil {
 		return nil, err
 	}
+	pdf.AddPage() // MeasureTextWidthは現在ページが必要
 	return &Measurer{pdf: pdf}, nil
 }
 

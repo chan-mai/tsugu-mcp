@@ -24,17 +24,21 @@ type Box struct {
 	X, Y, W, H float64
 	Lines      []string
 	FontSize   float64 // pt
-	LineHeight float64 // mm 行送り
-	Pad        float64 // mm 内側余白
+	LineHeight float64 // 行送り(mm)
+	Pad        float64 // 内側余白(mm)
 	Border     bool
 }
 
-// 関係線(Points折れ線、Double=婚姻二重線)
+// 線色(ゼロ値=黒)
+type RGB struct{ R, G, B uint8 }
+
+// 関係線(Points折れ線、Double=婚姻二重線、Color未指定は黒)
 type Edge struct {
 	Points []Pt
-	Width  float64 // mm 線幅
+	Width  float64 // 線幅(mm)
 	Double bool
 	Dashed bool
+	Color  RGB
 }
 
 // 単独テキスト(タイトル・以下余白など)

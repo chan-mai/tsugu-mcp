@@ -12,9 +12,9 @@ type recCanvas struct {
 	rects, lines, texts int
 }
 
-func (r *recCanvas) Rect(x, y, w, h float64)                                { r.rects++ }
-func (r *recCanvas) Line(x1, y1, x2, y2, width float64, dashed bool)        { r.lines++ }
-func (r *recCanvas) Text(x, y float64, s string, sz float64, a scene.Align) { r.texts++ }
+func (r *recCanvas) Rect(x, y, w, h float64)                                          { r.rects++ }
+func (r *recCanvas) Line(x1, y1, x2, y2, width float64, dashed bool, color scene.RGB) { r.lines++ }
+func (r *recCanvas) Text(x, y float64, s string, sz float64, a scene.Align)           { r.texts++ }
 
 func TestDraw_EmitsPrimitives(t *testing.T) {
 	s := scene.Scene{

@@ -11,7 +11,7 @@ import (
 // 描画バックエンドの抽象(差し替え・テスト可能、座標mm・フォントpt)
 type Canvas interface {
 	Rect(x, y, w, h float64)
-	Line(x1, y1, x2, y2, width float64, dashed bool)
+	Line(x1, y1, x2, y2, width float64, dashed bool, color scene.RGB)
 	Text(x, y float64, text string, sizePt float64, align scene.Align)
 }
 
@@ -39,12 +39,12 @@ func drawEdge(c Canvas, e scene.Edge) {
 	for i := 0; i+1 < len(e.Points); i++ {
 		a, b := e.Points[i], e.Points[i+1]
 		if !e.Double {
-			c.Line(a.X, a.Y, b.X, b.Y, e.Width, e.Dashed)
+			c.Line(a.X, a.Y, b.X, b.Y, e.Width, e.Dashed, e.Color)
 			continue
 		}
 		ox, oy := perpOffset(a, b, doubleLineOffset)
-		c.Line(a.X+ox, a.Y+oy, b.X+ox, b.Y+oy, e.Width, e.Dashed)
-		c.Line(a.X-ox, a.Y-oy, b.X-ox, b.Y-oy, e.Width, e.Dashed)
+		c.Line(a.X+ox, a.Y+oy, b.X+ox, b.Y+oy, e.Width, e.Dashed, e.Color)
+		c.Line(a.X-ox, a.Y-oy, b.X-ox, b.Y-oy, e.Width, e.Dashed, e.Color)
 	}
 }
 

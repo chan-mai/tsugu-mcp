@@ -1,7 +1,8 @@
-// Command tsugu はJSONから相続関係説明図PDFを生成するCLI
+// Command tsuguはJSONから相続書類のPDFを生成するCLI
 //
-//	tsugu -in family.json -out chart.pdf [-era wareki|both|seireki]
-//	tsugu < family.json > chart.pdf
+//	tsugu chart -in family.json -out chart.pdf [-era wareki|both|seireki]   # 相続関係説明図
+//	tsugu touki -in touki.json  -out touki.pdf [-era wareki|both|seireki]   # 相続登記申請書
+//	cat x.json | tsugu chart > out.pdf
 package main
 
 import (
@@ -10,50 +11,85 @@ import (
 	"io"
 	"os"
 
+	"tsugu-mcp/registration"
 	"tsugu-mcp/relationchart"
 )
 
 func main() {
-	if err := run(); err != nil {
+	if err := run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
 }
 
-func run() error {
-	in := flag.String("in", "", "入力JSONのパス (省略時は標準入力)")
-	out := flag.String("out", "", "出力PDFのパス (省略時は標準出力)")
-	era := flag.String("era", "wareki", "日付表記: wareki(和暦) | both(和暦+西暦) | seireki")
-	flag.Parse()
-
-	opt, err := optionsFromEra(*era)
-	if err != nil {
-		return err
+func run(args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("usage: tsugu <chart|touki> -in <json> -out <pdf> [-era wareki|both|seireki]")
 	}
-
-	data, err := readInput(*in)
-	if err != nil {
-		return err
+	switch args[0] {
+	case "chart":
+		return runChart(args[1:])
+	case "touki":
+		return runTouki(args[1:])
+	default:
+		return fmt.Errorf("unknown subcommand: %q (chart|touki)", args[0])
 	}
-
-	pdf, err := relationchart.GenerateFromJSON(data, opt)
-	if err != nil {
-		return err
-	}
-
-	return writeOutput(*out, pdf)
 }
 
-func optionsFromEra(era string) (relationchart.Options, error) {
-	switch era {
+func runChart(args []string) error {
+	in, out, era, err := parseFlags("chart", args)
+	if err != nil {
+		return err
+	}
+	data, err := readInput(in)
+	if err != nil {
+		return err
+	}
+	pdf, err := relationchart.GenerateFromJSON(data, relationchart.Options{Era: era})
+	if err != nil {
+		return err
+	}
+	return writeOutput(out, pdf)
+}
+
+func runTouki(args []string) error {
+	in, out, era, err := parseFlags("touki", args)
+	if err != nil {
+		return err
+	}
+	data, err := readInput(in)
+	if err != nil {
+		return err
+	}
+	pdf, err := registration.GenerateFromJSON(data, registration.Options{Era: era})
+	if err != nil {
+		return err
+	}
+	return writeOutput(out, pdf)
+}
+
+func parseFlags(name string, args []string) (in, out string, era relationchart.EraStyle, err error) {
+	fs := flag.NewFlagSet(name, flag.ContinueOnError)
+	inF := fs.String("in", "", "入力JSONのパス(省略時は標準入力)")
+	outF := fs.String("out", "", "出力PDFのパス(省略時は標準出力)")
+	eraF := fs.String("era", "wareki", "日付表記: wareki | both | seireki")
+	if err = fs.Parse(args); err != nil {
+		return
+	}
+	era, err = parseEra(*eraF)
+	return *inF, *outF, era, err
+}
+
+func parseEra(s string) (relationchart.EraStyle, error) {
+	switch s {
 	case "wareki", "":
-		return relationchart.Options{Era: relationchart.EraWareki}, nil
+		return relationchart.EraWareki, nil
 	case "both":
-		return relationchart.Options{Era: relationchart.EraWarekiWithSeireki}, nil
+		return relationchart.EraWarekiWithSeireki, nil
 	case "seireki":
-		return relationchart.Options{Era: relationchart.EraSeireki}, nil
+		return relationchart.EraSeireki, nil
 	default:
-		return relationchart.Options{}, fmt.Errorf("unknown -era value: %q (wareki|both|seireki)", era)
+		return 0, fmt.Errorf("unknown -era value: %q (wareki|both|seireki)", s)
 	}
 }
 

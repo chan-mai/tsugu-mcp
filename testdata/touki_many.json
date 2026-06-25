@@ -1,0 +1,37 @@
+{
+  "causes": [ { "date": "2024-06-15", "text": "相続" } ],
+  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" },
+  "applicants": [
+    {
+      "name": "山田 花子",
+      "address": "東京都新宿区西新宿二丁目2番2号",
+      "nameKana": "やまだ はなこ",
+      "birthDate": "1950-05-05",
+      "email": "hanako@example.com",
+      "phone": "090-0000-0000",
+      "contact": true
+    }
+  ],
+  "attachments": ["登記原因証明情報", "住所証明情報"],
+  "declineIdInfo": false,
+  "applicationDate": "2024-12-10",
+  "registry": "東京法務局",
+  "taxValue": "0",
+  "registrationTax": "0",
+  "properties": [
+    { "kind": "land", "number": "0100000000001", "location": "東京都千代田区一番町1番", "lotNumber": "1番", "landCategory": "宅地", "area": "120.00" },
+    { "kind": "land", "number": "0100000000002", "location": "東京都千代田区一番町2番", "lotNumber": "2番", "landCategory": "畑", "area": "230.00" },
+    { "kind": "land", "number": "0100000000003", "location": "東京都千代田区一番町3番", "lotNumber": "3番", "landCategory": "田", "area": "340.00" },
+    { "kind": "land", "number": "0100000000004", "location": "東京都千代田区一番町4番", "lotNumber": "4番", "landCategory": "宅地", "area": "450.00" },
+    { "kind": "land", "number": "0100000000005", "location": "東京都千代田区一番町5番", "lotNumber": "5番", "landCategory": "畑", "area": "560.00" },
+    { "kind": "land", "number": "0100000000006", "location": "東京都千代田区一番町6番", "lotNumber": "6番", "landCategory": "田", "area": "670.00" },
+    { "kind": "land", "number": "0100000000007", "location": "東京都千代田区一番町7番", "lotNumber": "7番", "landCategory": "宅地", "area": "780.00" },
+    { "kind": "land", "number": "0100000000008", "location": "東京都千代田区一番町8番", "lotNumber": "8番", "landCategory": "畑", "area": "890.00" },
+    { "kind": "land", "number": "0100000000009", "location": "東京都千代田区一番町9番", "lotNumber": "9番", "landCategory": "田", "area": "910.00" },
+    { "kind": "land", "number": "0100000000010", "location": "東京都千代田区一番町10番", "lotNumber": "10番", "landCategory": "宅地", "area": "101.00" },
+    { "kind": "land", "number": "0100000000011", "location": "東京都千代田区一番町11番", "lotNumber": "11番", "landCategory": "畑", "area": "112.00" },
+    { "kind": "land", "number": "0100000000012", "location": "東京都千代田区一番町12番", "lotNumber": "12番", "landCategory": "田", "area": "123.00" },
+    { "kind": "land", "number": "0100000000013", "location": "東京都千代田区一番町13番", "lotNumber": "13番", "landCategory": "宅地", "area": "134.00" },
+    { "kind": "land", "number": "0100000000014", "location": "東京都千代田区一番町14番", "lotNumber": "14番", "landCategory": "畑", "area": "145.00" }
+  ]
+}
