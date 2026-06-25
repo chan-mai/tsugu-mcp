@@ -81,7 +81,7 @@ pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions
   "causes": [                                  // 原因(数次相続で複数併記)
     { "date": "2020-03-10", "text": "山田太郎相続" }, { "date": "2024-06-15", "text": "相続" }
   ],
-  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" },
+  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" }, // 住所は死亡時の本籍
   "applicants": [
     { "name": "山田 花子", "address": "東京都新宿区西新宿二丁目2番2号", "share": "2分の1",
       "nameKana": "やまだ はなこ", "birthDate": "1950-05-05",
@@ -93,7 +93,7 @@ pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions
   "applicationDate": "2024-12-10", "registry": "東京法務局",
   "taxValue": "0", "registrationTax": "0",
   "properties": [
-    { "kind": "land",     "number": "...", "location": "...", "lotNumber": "1番", "landCategory": "宅地", "area": "123.45" },
+    { "kind": "land",     "number": "...", "location": "...", "lotNumber": "1番", "landCategory": "宅地", "area": "123.45" },// numberは 土地家屋償却資産（補充）課税台帳（名寄帳） の場合、物件番号として記載される場合もあるみたい
     { "kind": "building", "number": "...", "location": "...", "houseNumber": "1番1",
       "buildingType": "居宅", "structure": "木造2階建", "floorArea": "1階 60.00平方メートル" }
   ]
