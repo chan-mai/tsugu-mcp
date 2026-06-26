@@ -20,7 +20,7 @@ func newServer() *mcp.Server {
 
 	mcp.AddTool(s, &mcp.Tool{
 		Name:        "generate_registration_application",
-		Description: "相続登記申請書(所有権移転、不動産が多ければ複数ページ)のPDFを生成しファイルパスを返す。原因・相続人・申請人(複数+持分)・不動産の表示(土地/建物)を流し込む。課税価格・登録免許税・相続分の算定は行わない。" + disclaimer,
+		Description: "相続登記申請書(所有権移転、不動産が多ければ複数ページ)のPDFを生成しファイルパスを返す。原因・相続人・申請人(複数+持分)・不動産の表示(土地/建物)を流し込む。各不動産に評価額(value)を渡すと登録免許税を自動計算して課税価格・登録免許税欄を補完する。相続分の算定は行わない。" + disclaimer,
 	}, handleTouki)
 
 	mcp.AddTool(s, &mcp.Tool{
@@ -39,6 +39,7 @@ func newServer() *mcp.Server {
 	}, handleDocs)
 
 	addKnowledgeResources(s)
+	addPrompts(s)
 	return s
 }
 

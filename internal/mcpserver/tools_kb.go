@@ -107,6 +107,53 @@ func formatDocs(r docguide.Result) string {
 	return b.String()
 }
 
+// 評価額が指定された不動産があれば登録免許税を計算し、申請書の課税価格・登録免許税を補完
+// 既入力値は上書きせず、補足説明(免税文言・注意・免責)を返す
+func autoFillTax(doc *toukiDoc) string {
+	hasValue := false
+	props := make([]regtax.Property, 0, len(doc.Properties))
+	for _, p := range doc.Properties {
+		if p.Value > 0 {
+			hasValue = true
+		}
+		props = append(props, regtax.Property{Kind: normalizeKind(p.Kind), Value: p.Value, Exemption: p.Exemption})
+	}
+	if !hasValue {
+		return ""
+	}
+	r := regtax.Calculate(regtax.Input{Properties: props})
+	if doc.TaxValue == "" {
+		doc.TaxValue = comma(r.TaxableTotal)
+	}
+	if doc.RegistrationTax == "" {
+		if r.Tax == 0 && len(r.ExemptStatements) > 0 {
+			doc.RegistrationTax = strings.Join(r.ExemptStatements, "　")
+		} else {
+			doc.RegistrationTax = comma(r.Tax)
+		}
+	}
+	var b strings.Builder
+	fmt.Fprintf(&b, "登録免許税を自動計算: 課税標準 %s円 / 税額 %s円", comma(r.TaxableTotal), comma(r.Tax))
+	for _, s := range r.ExemptStatements {
+		fmt.Fprintf(&b, "\n免税: %s(申請書に条文記載が必要)", s)
+	}
+	for _, n := range r.EligibilityNotes {
+		fmt.Fprintf(&b, "\n注意: %s", n)
+	}
+	b.WriteString("\n" + disclaimer)
+	return b.String()
+}
+
+// 不動産の種別をregtaxのland|buildingへ正規化
+func normalizeKind(k string) string {
+	switch k {
+	case "building", "建物":
+		return "building"
+	default:
+		return "land"
+	}
+}
+
 // 整数を3桁区切りにする
 func comma(n int) string {
 	s := strconv.Itoa(n)

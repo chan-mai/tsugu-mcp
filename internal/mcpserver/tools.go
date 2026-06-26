@@ -92,6 +92,7 @@ func handleTouki(_ context.Context, _ *mcp.CallToolRequest, in toukiToolInput) (
 	if err != nil {
 		return errorResult(err)
 	}
+	taxNote := autoFillTax(&in.Document)
 	data, err := json.Marshal(in.Document)
 	if err != nil {
 		return errorResult(err)
@@ -104,5 +105,9 @@ func handleTouki(_ context.Context, _ *mcp.CallToolRequest, in toukiToolInput) (
 	if err != nil {
 		return errorResult(err)
 	}
-	return okResult(path, len(pdf))
+	res, out, e := okResult(path, len(pdf))
+	if taxNote != "" {
+		res.Content = append(res.Content, &mcp.TextContent{Text: taxNote})
+	}
+	return res, out, e
 }

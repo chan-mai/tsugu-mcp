@@ -87,8 +87,8 @@ func (b *builder) header(app touki.Application) {
 	b.attachmentRows(app.Attachments, app.DeclineIDInfo)
 	b.fieldRow0(b.wareki(app.ApplicationDate) + "申請　" + app.Registry)
 	b.y += 1
-	b.fieldRow("課税価格", "金　"+orZero(app.TaxValue)+"　円")
-	b.fieldRow("登録免許税", "金　"+orZero(app.RegistrationTax)+"　円")
+	b.fieldRow("課税価格", taxAmount(app.TaxValue))
+	b.fieldRow("登録免許税", taxAmount(app.RegistrationTax))
 
 	b.y += 2
 	b.body(st.MarginX, b.y, "不動産の表示")
@@ -296,6 +296,14 @@ func orZero(s string) string {
 		return "0"
 	}
 	return s
+}
+
+// 金額欄
+func taxAmount(v string) string {
+	if strings.Contains(v, "非課税") {
+		return v
+	}
+	return "金　" + orZero(v) + "　円"
 }
 
 // ラベル文字を全角スペースでtarget文字幅へ均等割付

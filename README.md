@@ -48,14 +48,16 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 
 **書類生成ツール**(入力 `{ document, outputPath?, era? }`、生成PDFの**ファイルパス**を返す。`document`は下記「入力JSON」と同一。`outputPath`省略時は一時ファイル):
 - `generate_relationship_chart` — 相続関係説明図
-- `generate_registration_application` — 相続登記申請書
+- `generate_registration_application` — 相続登記申請書(各不動産に `value`=評価額 を渡すと登録免許税を自動計算)
 - `generate_division_agreement` — 遺産分割協議書
 
 **知識駆動ツール**(`docs/knowledge`に基づく。法的助言ではなく情報提供で、出力に免責を付す):
 - `calculate_registration_tax` — 登録免許税の計算(課税標準の合算・端数処理・免税措置の文言)
 - `list_required_documents` — 必要書類ナビ(相続方法・相続人パターン別の添付情報4分類)
 
-**知識リソース**: `docs/knowledge`の9文書を`knowledge://<slug>`で公開(`knowledge://index`が入口)。ホスト/LLMが必要時に参照する。
+**知識リソース**: `docs/knowledge`の8文書を`knowledge://<slug>`で公開(`knowledge://index`が入口)。ホスト/LLMが必要時に参照する。
+
+**プロンプト**: `prepare_inheritance_registration` — ヒアリング→ケース判定→必要書類→税額→書類生成を一気通貫で進めるガイド導線。
 
 クライアント登録例(Claude Desktop/Code):
 

@@ -93,6 +93,8 @@ type toukiProperty struct {
 	BuildingType string `json:"buildingType,omitempty" jsonschema:"種類(建物)"`
 	Structure    string `json:"structure,omitempty" jsonschema:"構造(建物)"`
 	FloorArea    string `json:"floorArea,omitempty" jsonschema:"床面積(建物)"`
+	Value        int    `json:"value,omitempty" jsonschema:"固定資産評価額(円)。指定すると登録免許税を自動計算"`
+	Exemption    string `json:"exemption,omitempty" jsonschema:"免税 none|small_value|intermediate(登録免許税の自動計算時)"`
 }
 
 type toukiDecedent struct {
