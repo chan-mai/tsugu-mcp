@@ -42,11 +42,17 @@ LLM/エージェントから書類PDFを生成するMCPサーバー。
 go build -o tsugu-mcp ./cmd/tsugu-mcp
 ```
 
-公開ツール(入力は `{ document, outputPath?, era? }`、生成したPDFの**ファイルパス**を返す。`document`の中身は下記「入力JSON」と同一):
+**書類生成ツール**(入力 `{ document, outputPath?, era? }`、生成PDFの**ファイルパス**を返す。`document`は下記「入力JSON」と同一。`outputPath`省略時は一時ファイル):
 - `generate_relationship_chart` — 相続関係説明図
 - `generate_registration_application` — 相続登記申請書
 
-`outputPath`省略時は一時ファイルへ書き出す。クライアント登録例(Claude Desktop/Code):
+**知識駆動ツール**(`docs/knowledge`に基づく。法的助言ではなく情報提供で、出力に免責を付す):
+- `calculate_registration_tax` — 登録免許税の計算(課税標準の合算・端数処理・免税措置の文言)
+- `list_required_documents` — 必要書類ナビ(相続方法・相続人パターン別の添付情報4分類)
+
+**知識リソース**: `docs/knowledge`の9文書を`knowledge://<slug>`で公開(`knowledge://index`が入口)。ホスト/LLMが必要時に参照する。
+
+クライアント登録例(Claude Desktop/Code):
 
 ```json
 { "mcpServers": { "tsugu": { "command": "/absolute/path/to/tsugu-mcp" } } }
@@ -140,7 +146,8 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 | `internal/render` | Scene→PDF。`Canvas`でgopdf依存を隔離。`ToPDFMulti`で複数ページ |
 | `family` / `internal/inputjson` / `internal/layout` / `relationchart` | 相続関係説明図: モデル / JSON境界 / 横型ツリー配置 / 公開API |
 | `touki` / `internal/reginput` / `internal/reglayout` / `registration` | 相続登記申請書: モデル / JSON境界 / 流し込み+ページ送り / 公開API |
-| `cmd/tsugu-mcp` / `internal/mcpserver` | MCPサーバー(stdio)。2書類のツールを公開しPDFパスを返す |
+| `cmd/tsugu-mcp` / `internal/mcpserver` | MCPサーバー(stdio)。書類生成・知識駆動ツール・知識リソースを公開 |
+| `docs/knowledge` / `internal/regtax` / `internal/docguide` | 相続知識ベース(埋め込み) / 登録免許税計算 / 必要書類ナビ。一次情報ベース、純関数で検証可 |
 
 レイアウトは Document を1本の家系ツリー(`tree.go`)へ変換し、左→右へ世代を列に割り当てて配置する。人物は枠なしカード(`card.go`)、関係線は縦の婚姻二重線と親子ブラケット。純粋な幾何計算のため `HeuristicMeasurer` で実フォント無しに座標を検証でき、描画は `Canvas` 抽象越しのためフェイクで呼び出しを検証できる。
 

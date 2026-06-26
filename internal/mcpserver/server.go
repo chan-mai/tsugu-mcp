@@ -15,14 +15,25 @@ func newServer() *mcp.Server {
 
 	mcp.AddTool(s, &mcp.Tool{
 		Name:        "generate_relationship_chart",
-		Description: "相続関係説明図(A4縦1ページ)のPDFを生成しファイルパスを返す。被相続人を中心に配偶者・子孫(代襲)・直系尊属・兄弟姉妹を作図する。法定相続人や相続分の算定は行わず、与えた内容を忠実に描画する。",
+		Description: "相続関係説明図(A4縦1ページ)のPDFを生成しファイルパスを返す。被相続人を中心に配偶者・子孫(代襲)・直系尊属・兄弟姉妹を作図する。法定相続人や相続分の算定は行わず、与えた内容を忠実に描画する。" + disclaimer,
 	}, handleChart)
 
 	mcp.AddTool(s, &mcp.Tool{
 		Name:        "generate_registration_application",
-		Description: "相続登記申請書(所有権移転、不動産が多ければ複数ページ)のPDFを生成しファイルパスを返す。原因・相続人・申請人(複数+持分)・不動産の表示(土地/建物)を流し込む。課税価格・登録免許税・相続分の算定は行わない。",
+		Description: "相続登記申請書(所有権移転、不動産が多ければ複数ページ)のPDFを生成しファイルパスを返す。原因・相続人・申請人(複数+持分)・不動産の表示(土地/建物)を流し込む。課税価格・登録免許税・相続分の算定は行わない。" + disclaimer,
 	}, handleTouki)
 
+	mcp.AddTool(s, &mcp.Tool{
+		Name:        "calculate_registration_tax",
+		Description: "相続登記の登録免許税を計算する(課税標準の合算・端数処理・免税措置の文言)。免税は自動適用せず、対象になり得る土地は注意のみ示す。" + disclaimer,
+	}, handleTax)
+
+	mcp.AddTool(s, &mcp.Tool{
+		Name:        "list_required_documents",
+		Description: "相続登記の必要書類を相続方法・相続人パターンから案内する(添付情報4分類・入手先・手数料目安)。" + disclaimer,
+	}, handleDocs)
+
+	addKnowledgeResources(s)
 	return s
 }
 
