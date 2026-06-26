@@ -51,9 +51,12 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 - `generate_registration_application` — 相続登記申請書(各不動産に `value`=評価額 を渡すと登録免許税を自動計算)
 - `generate_division_agreement` — 遺産分割協議書
 
-**知識駆動ツール**(`docs/knowledge`に基づく。法的助言ではなく情報提供で、出力に免責を付す):
+**知識駆動・判定ツール**(`docs/knowledge`に基づく。法的助言ではなく情報提供で、出力に免責を付す):
 - `calculate_registration_tax` — 登録免許税の計算(課税標準の合算・端数処理・免税措置の文言)
 - `list_required_documents` — 必要書類ナビ(相続方法・相続人パターン別の添付情報4分類)
+- `calculate_statutory_shares` — 法定相続分の算定(現行・民法900/901条。半血・代襲を既約分数で計算。配分判断はしない)
+- `select_application_pattern` — ケース別様式の選択(A法定相続〜H配偶者居住権の目的・原因・申請構造・税率・添付)
+- `guide_heir_notification` — 申請義務期限の算定と相続人申告登記の案内
 
 **知識リソース**: `docs/knowledge`の8文書を`knowledge://<slug>`で公開(`knowledge://index`が入口)。ホスト/LLMが必要時に参照する。
 

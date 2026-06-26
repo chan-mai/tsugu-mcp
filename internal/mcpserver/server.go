@@ -38,6 +38,21 @@ func newServer() *mcp.Server {
 		Description: "相続登記の必要書類を相続方法・相続人パターンから案内する(添付情報4分類・入手先・手数料目安)。" + disclaimer,
 	}, handleDocs)
 
+	mcp.AddTool(s, &mcp.Tool{
+		Name:        "calculate_statutory_shares",
+		Description: "法定相続分を算定する(現行・民法900/901条。配偶者と順位の組合せ・半血・代襲を既約分数で計算)。これは法律上の原則的割合であり、実際の配分判断には踏み込まない。" + disclaimer,
+	}, handleShares)
+
+	mcp.AddTool(s, &mcp.Tool{
+		Name:        "select_application_pattern",
+		Description: "相続登記申請書のケース別様式(A法定相続〜H配偶者居住権)を選び、登記の目的・原因・申請構造・税率・添付の要点を返す。" + disclaimer,
+	}, handlePattern)
+
+	mcp.AddTool(s, &mcp.Tool{
+		Name:        "guide_heir_notification",
+		Description: "相続登記の申請義務期限を算定し、期限内に難しい場合の相続人申告登記(簡易な義務履行)を案内する。" + disclaimer,
+	}, handleNotify)
+
 	addKnowledgeResources(s)
 	addPrompts(s)
 	return s
