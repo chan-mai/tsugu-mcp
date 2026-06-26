@@ -1,8 +1,9 @@
 // Command tsuguはJSONから相続書類のPDFを生成するCLI
 //
-//	tsugu chart -in family.json -out chart.pdf [-era wareki|both|seireki]   # 相続関係説明図
-//	tsugu touki -in touki.json  -out touki.pdf [-era wareki|both|seireki]   # 相続登記申請書
-//	cat x.json | tsugu chart > out.pdf
+//		tsugu chart -in family.json -out chart.pdf [-era wareki|both|seireki]   # 相続関係説明図
+//		tsugu touki -in touki.json  -out touki.pdf [-era wareki|both|seireki]   # 相続登記申請書
+//	 tsugu bunkatsu -in bunkatsu.json -out bunkatsu.pdf [-era wareki|both|seireki] # 遺産分割協議書
+//		cat x.json | tsugu chart > out.pdf
 package main
 
 import (
@@ -11,6 +12,7 @@ import (
 	"io"
 	"os"
 
+	"tsugu-mcp/agreement"
 	"tsugu-mcp/registration"
 	"tsugu-mcp/relationchart"
 )
@@ -24,15 +26,17 @@ func main() {
 
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: tsugu <chart|touki> -in <json> -out <pdf> [-era wareki|both|seireki]")
+		return fmt.Errorf("usage: tsugu <chart|touki|bunkatsu> -in <json> -out <pdf> [-era wareki|both|seireki]")
 	}
 	switch args[0] {
 	case "chart":
 		return runChart(args[1:])
 	case "touki":
 		return runTouki(args[1:])
+	case "bunkatsu":
+		return runBunkatsu(args[1:])
 	default:
-		return fmt.Errorf("unknown subcommand: %q (chart|touki)", args[0])
+		return fmt.Errorf("unknown subcommand: %q (chart|touki|bunkatsu)", args[0])
 	}
 }
 
@@ -62,6 +66,22 @@ func runTouki(args []string) error {
 		return err
 	}
 	pdf, err := registration.GenerateFromJSON(data, registration.Options{Era: era})
+	if err != nil {
+		return err
+	}
+	return writeOutput(out, pdf)
+}
+
+func runBunkatsu(args []string) error {
+	in, out, era, err := parseFlags("bunkatsu", args)
+	if err != nil {
+		return err
+	}
+	data, err := readInput(in)
+	if err != nil {
+		return err
+	}
+	pdf, err := agreement.GenerateFromJSON(data, agreement.Options{Era: era})
 	if err != nil {
 		return err
 	}

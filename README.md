@@ -4,6 +4,7 @@
 
 - **相続関係説明図**(1ページ): 左→右の横型家系図、人物は枠で囲わず`(続柄)　氏名`で表記、婚姻は縦の二重線、親子はブラケット線。被相続人の左に詳細(最後の住所・本籍・出生・死亡)、左下に作成日・作成者、右下に「以下余白」。
 - **相続登記申請書**(所有権移転・複数ページ): 1枚目上部に受付番号表用の破線枠、登記の目的・原因・相続人・申請人(複数+持分)・添付情報・申請日・課税価格・登録免許税、続いて不動産の表示(土地/建物)を流し込み。件数が多い場合は自動でページ送り。
+- **遺産分割協議書**(複数ページ): 被相続人・共同相続人・取得の対応(取得者+持分)・不動産/財産を本文に折返し流し込み、末尾に署名押印欄を付す。
 
 ## 使い方
 
@@ -12,12 +13,13 @@
 ```sh
 go build -o tsugu ./cmd/tsugu
 
-./tsugu chart -in testdata/sample_full.json  -out chart.pdf   # 相続関係説明図
-./tsugu touki -in testdata/touki_sample.json -out touki.pdf   # 相続登記申請書
-./tsugu chart -era both < family.json > chart.pdf             # 標準入出力 / 西暦併記
+./tsugu chart    -in testdata/sample_full.json     -out chart.pdf      # 相続関係説明図
+./tsugu touki    -in testdata/touki_sample.json    -out touki.pdf      # 相続登記申請書
+./tsugu bunkatsu -in testdata/bunkatsu_sample.json -out bunkatsu.pdf   # 遺産分割協議書
+./tsugu chart -era both < family.json > chart.pdf                      # 標準入出力 / 西暦併記
 ```
 
-サブコマンド `chart`(相続関係説明図) / `touki`(相続登記申請書)。各々共通フラグ:
+サブコマンド `chart`(相続関係説明図) / `touki`(相続登記申請書) / `bunkatsu`(遺産分割協議書)。各々共通フラグ:
 
 | フラグ | 既定 | 内容 |
 |--------|------|------|
@@ -32,6 +34,8 @@ go build -o tsugu ./cmd/tsugu
 pdf, err := relationchart.GenerateFromJSON(chartJSON, relationchart.DefaultOptions())
 // 相続登記申請書
 pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions())
+// 遺産分割協議書
+pdf, err := agreement.GenerateFromJSON(bunkatsuJSON, agreement.DefaultOptions())
 ```
 
 ### MCPサーバー(stdio)
@@ -45,6 +49,7 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 **書類生成ツール**(入力 `{ document, outputPath?, era? }`、生成PDFの**ファイルパス**を返す。`document`は下記「入力JSON」と同一。`outputPath`省略時は一時ファイル):
 - `generate_relationship_chart` — 相続関係説明図
 - `generate_registration_application` — 相続登記申請書
+- `generate_division_agreement` — 遺産分割協議書
 
 **知識駆動ツール**(`docs/knowledge`に基づく。法的助言ではなく情報提供で、出力に免責を付す):
 - `calculate_registration_tax` — 登録免許税の計算(課税標準の合算・端数処理・免税措置の文言)
@@ -146,6 +151,7 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 | `internal/render` | Scene→PDF。`Canvas`でgopdf依存を隔離。`ToPDFMulti`で複数ページ |
 | `family` / `internal/inputjson` / `internal/layout` / `relationchart` | 相続関係説明図: モデル / JSON境界 / 横型ツリー配置 / 公開API |
 | `touki` / `internal/reginput` / `internal/reglayout` / `registration` | 相続登記申請書: モデル / JSON境界 / 流し込み+ページ送り / 公開API |
+| `bunkatsu` / `internal/bunkatsuinput` / `internal/bunkatsulayout` / `agreement` | 遺産分割協議書: モデル / JSON境界 / 折返し流し込み / 公開API |
 | `cmd/tsugu-mcp` / `internal/mcpserver` | MCPサーバー(stdio)。書類生成・知識駆動ツール・知識リソースを公開 |
 | `docs/knowledge` / `internal/regtax` / `internal/docguide` | 相続知識ベース(埋め込み) / 登録免許税計算 / 必要書類ナビ。一次情報ベース、純関数で検証可 |
 
