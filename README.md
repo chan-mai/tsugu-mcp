@@ -81,7 +81,7 @@ pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions
   "causes": [                                  // 原因(数次相続で複数併記)
     { "date": "2020-03-10", "text": "山田太郎相続" }, { "date": "2024-06-15", "text": "相続" }
   ],
-  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" }, // 住所は死亡時の本籍
+  "decedent": { "name": "山田 一郎" },
   "applicants": [
     { "name": "山田 花子", "address": "東京都新宿区西新宿二丁目2番2号", "share": "2分の1",
       "nameKana": "やまだ はなこ", "birthDate": "1950-05-05",

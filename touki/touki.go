@@ -20,8 +20,7 @@ type Cause struct {
 
 // 相続人欄の被相続人
 type Decedent struct {
-	Name    string
-	Address string
+	Name string
 }
 
 // 申請人(複数+持分)

@@ -12,7 +12,7 @@ import (
 func app(nProps int) touki.Application {
 	a := touki.Application{
 		Causes:          []touki.Cause{{Date: ymd.Date{Year: 2024, Month: 6, Day: 15}, Text: "相続"}},
-		Decedent:        touki.Decedent{Name: "山田 一郎", Address: "東京都千代田区一番町1番地"},
+		Decedent:        touki.Decedent{Name: "山田 一郎"},
 		Applicants:      []touki.Applicant{{Name: "山田 花子", BirthDate: ymd.Date{Year: 1950, Month: 5, Day: 5}, Contact: true}},
 		ApplicationDate: ymd.Date{Year: 2024, Month: 12, Day: 10},
 		Registry:        "東京法務局",

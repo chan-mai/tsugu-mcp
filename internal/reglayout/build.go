@@ -139,12 +139,7 @@ func (b *builder) decedentRows(d touki.Decedent) {
 	b.flow(2 * b.st.LineH)
 	b.body(b.st.MarginX, b.y, justify("相続人", b.st.LabelChars))
 	b.body(b.st.valueX(), b.y, "（被相続人　"+d.Name+"　）")
-	b.y += b.st.LineH
-	if d.Address != "" {
-		b.body(b.st.valueX(), b.y, d.Address)
-		b.y += b.st.LineH
-	}
-	b.y += 1
+	b.y += 2*b.st.LineH + 1 // 名の下に住所1行分の空きを残す
 }
 
 func (b *builder) applicantRows(apps []touki.Applicant) {

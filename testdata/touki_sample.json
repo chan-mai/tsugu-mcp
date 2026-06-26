@@ -3,7 +3,7 @@
     { "date": "2020-03-10", "text": "山田太郎相続" },
     { "date": "2024-06-15", "text": "相続" }
   ],
-  "decedent": { "name": "山田 一郎", "address": "東京都千代田区一番町1番地" },
+  "decedent": { "name": "山田 一郎" },
   "applicants": [
     {
       "name": "山田 花子",

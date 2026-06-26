@@ -31,8 +31,7 @@ type cause struct {
 }
 
 type decedent struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
+	Name string `json:"name"`
 }
 
 type applicant struct {
@@ -68,7 +67,7 @@ func Decode(data []byte) (touki.Application, error) {
 
 	var errs []error
 	app := touki.Application{
-		Decedent:        touki.Decedent{Name: d.Decedent.Name, Address: d.Decedent.Address},
+		Decedent:        touki.Decedent{Name: d.Decedent.Name},
 		Attachments:     d.Attachments,
 		DeclineIDInfo:   d.DeclineIDInfo,
 		ApplicationDate: parseDate("applicationDate", d.ApplicationDate, &errs),
