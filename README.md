@@ -34,6 +34,24 @@ pdf, err := relationchart.GenerateFromJSON(chartJSON, relationchart.DefaultOptio
 pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions())
 ```
 
+### MCPサーバー(stdio)
+
+LLM/エージェントから書類PDFを生成するMCPサーバー。
+
+```sh
+go build -o tsugu-mcp ./cmd/tsugu-mcp
+```
+
+公開ツール(入力は `{ document, outputPath?, era? }`、生成したPDFの**ファイルパス**を返す。`document`の中身は下記「入力JSON」と同一):
+- `generate_relationship_chart` — 相続関係説明図
+- `generate_registration_application` — 相続登記申請書
+
+`outputPath`省略時は一時ファイルへ書き出す。クライアント登録例(Claude Desktop/Code):
+
+```json
+{ "mcpServers": { "tsugu": { "command": "/absolute/path/to/tsugu-mcp" } } }
+```
+
 ## 入力JSON(相続関係説明図)
 
 人物は所属(spouse / children / descendants / ascendants / siblings)とネストで関係を表す。各 children/siblings ノードは自分の `spouse` と `descendants`(代襲)を持てる。
@@ -122,6 +140,7 @@ pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions
 | `internal/render` | Scene→PDF。`Canvas`でgopdf依存を隔離。`ToPDFMulti`で複数ページ |
 | `family` / `internal/inputjson` / `internal/layout` / `relationchart` | 相続関係説明図: モデル / JSON境界 / 横型ツリー配置 / 公開API |
 | `touki` / `internal/reginput` / `internal/reglayout` / `registration` | 相続登記申請書: モデル / JSON境界 / 流し込み+ページ送り / 公開API |
+| `cmd/tsugu-mcp` / `internal/mcpserver` | MCPサーバー(stdio)。2書類のツールを公開しPDFパスを返す |
 
 レイアウトは Document を1本の家系ツリー(`tree.go`)へ変換し、左→右へ世代を列に割り当てて配置する。人物は枠なしカード(`card.go`)、関係線は縦の婚姻二重線と親子ブラケット。純粋な幾何計算のため `HeuristicMeasurer` で実フォント無しに座標を検証でき、描画は `Canvas` 抽象越しのためフェイクで呼び出しを検証できる。
 
