@@ -35,20 +35,20 @@ func TestBuild_SpouseChildren(t *testing.T) {
 	s := build(doc)
 
 	if got := personBoxes(s); got != 4 {
-		t.Fatalf("人物カード = %d, want 4 (被相続人・配偶者・子2)", got)
+		t.Fatalf("person cards = %d, want 4 (被相続人・配偶者・子2)", got)
 	}
 	if got := countDouble(s); got != 1 {
-		t.Errorf("婚姻二重線 = %d, want 1", got)
+		t.Errorf("marriage double line = %d, want 1", got)
 	}
 
 	dec := findBox(t, s, "被")
 	son := findBox(t, s, "長男")
 	spouse := findBox(t, s, "妻")
 	if son.X <= dec.X {
-		t.Errorf("子は被相続人より右(次世代列)であるべき: 子 x=%.1f 被相続人 x=%.1f", son.X, dec.X)
+		t.Errorf("子 should be right of 被相続人 (next-generation column): 子 x=%.1f 被相続人 x=%.1f", son.X, dec.X)
 	}
 	if spouse.Y <= dec.Y {
-		t.Errorf("配偶者は被相続人の下に積むべき: 配偶者 y=%.1f 被相続人 y=%.1f", spouse.Y, dec.Y)
+		t.Errorf("配偶者 should be stacked below 被相続人: 配偶者 y=%.1f 被相続人 y=%.1f", spouse.Y, dec.Y)
 	}
 	assertWithinPage(t, s)
 }
@@ -70,7 +70,7 @@ func TestBuild_Representation(t *testing.T) {
 	child := findBox(t, s, "二男")
 	grandchild := findBox(t, s, "孫")
 	if grandchild.X <= child.X {
-		t.Errorf("代襲の孫は親より右の世代であるべき: 孫 x=%.1f 親 x=%.1f", grandchild.X, child.X)
+		t.Errorf("孫 by representation should be in a generation right of 親: 孫 x=%.1f 親 x=%.1f", grandchild.X, child.X)
 	}
 	assertWithinPage(t, s)
 }
@@ -86,12 +86,12 @@ func TestBuild_Ascendants(t *testing.T) {
 	s := build(doc)
 
 	if got := personBoxes(s); got != 3 {
-		t.Fatalf("人物カード = %d, want 3 (被相続人・父・母)", got)
+		t.Fatalf("person cards = %d, want 3 (被相続人・父・母)", got)
 	}
 	father := findBox(t, s, "父")
 	dec := findBox(t, s, "被")
 	if dec.X <= father.X {
-		t.Errorf("被相続人は尊属より右の世代であるべき: 被相続人 x=%.1f 父 x=%.1f", dec.X, father.X)
+		t.Errorf("被相続人 should be in a generation right of ascendants: 被相続人 x=%.1f 父 x=%.1f", dec.X, father.X)
 	}
 	assertWithinPage(t, s)
 }
@@ -99,7 +99,7 @@ func TestBuild_Ascendants(t *testing.T) {
 func TestBuild_DecedentOnly(t *testing.T) {
 	s := build(family.Document{Decedent: baseDecedent()})
 	if got := personBoxes(s); got != 1 {
-		t.Fatalf("人物カード = %d, want 1", got)
+		t.Fatalf("person cards = %d, want 1", got)
 	}
 	assertWithinPage(t, s)
 }
@@ -133,7 +133,7 @@ func findBox(t *testing.T, s scene.Scene, substr string) scene.Box {
 			}
 		}
 	}
-	t.Fatalf("%q を含む欄が見つかりません", substr)
+	t.Fatalf("no field containing %q found", substr)
 	return scene.Box{}
 }
 
@@ -142,7 +142,7 @@ func assertWithinPage(t *testing.T, s scene.Scene) {
 	const eps = 0.01
 	for _, b := range s.Boxes {
 		if b.X < -eps || b.Y < -eps || b.X+b.W > s.Width+eps || b.Y+b.H > s.Height+eps {
-			t.Errorf("欄がページ外: %+v (page %.0fx%.0f)", b, s.Width, s.Height)
+			t.Errorf("field out of page: %+v (page %.0fx%.0f)", b, s.Width, s.Height)
 		}
 	}
 }

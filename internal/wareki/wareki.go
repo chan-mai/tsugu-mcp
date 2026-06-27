@@ -53,6 +53,16 @@ func Format(year, month, day int, style Style) string {
 	return fmt.Sprintf("%s%s(%d年)%s", e.name, eraYear, year, mmdd)
 }
 
+// EraYearは元号名と和暦年を返す(署名欄の年表示用)
+// 元号判定不能なら("", year)
+func EraYear(year, month, day int) (string, int) {
+	e, ok := lookup(year, month, day)
+	if !ok {
+		return "", year
+	}
+	return e.name, year - e.year + 1
+}
+
 func lookup(year, month, day int) (era, bool) {
 	key := year*10000 + month*100 + day
 	for _, e := range eras {

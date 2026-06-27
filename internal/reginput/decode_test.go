@@ -27,23 +27,23 @@ func TestDecode_Valid(t *testing.T) {
 		t.Errorf("applicationDate=%v", app.ApplicationDate)
 	}
 	if len(app.Applicants) != 1 || !app.Applicants[0].Contact {
-		t.Errorf("applicant 解釈に失敗: %+v", app.Applicants)
+		t.Errorf("applicant failed to parse: %+v", app.Applicants)
 	}
 	if len(app.Properties) != 2 || app.Properties[0].Kind != touki.Land || app.Properties[1].Kind != touki.Building {
-		t.Fatalf("property kind 解釈に失敗: %+v", app.Properties)
+		t.Fatalf("property kind failed to parse: %+v", app.Properties)
 	}
 }
 
 func TestDecode_BadDate(t *testing.T) {
 	_, err := Decode([]byte(`{"applicants":[{"name":"x"}],"properties":[],"applicationDate":"2024-13-40"}`))
 	if err == nil {
-		t.Fatal("不正な日付でエラーになるべき")
+		t.Fatal("expected error for invalid date")
 	}
 }
 
 func TestDecode_UnknownKind(t *testing.T) {
 	_, err := Decode([]byte(`{"properties":[{"kind":"船"}]}`))
 	if err == nil {
-		t.Fatal("不明なkindでエラーになるべき")
+		t.Fatal("expected error for unknown kind")
 	}
 }

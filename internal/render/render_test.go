@@ -29,10 +29,10 @@ func TestDraw_EmitsPrimitives(t *testing.T) {
 		t.Errorf("rects = %d, want 1", c.rects)
 	}
 	if c.lines != 2 {
-		t.Errorf("二重線は2本に展開されるべき: lines = %d, want 2", c.lines)
+		t.Errorf("double line should expand into 2 lines: lines = %d, want 2", c.lines)
 	}
 	if c.texts != 3 {
-		t.Errorf("texts = %d, want 3 (枠2行 + ラベル1)", c.texts)
+		t.Errorf("texts = %d, want 3 (box 2 lines + label 1)", c.texts)
 	}
 }
 
@@ -46,10 +46,10 @@ func TestToPDF_ProducesPDF(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !bytes.HasPrefix(b, []byte("%PDF")) {
-		t.Errorf("PDFヘッダがありません: %q", b[:min(8, len(b))])
+		t.Errorf("PDF header missing: %q", b[:min(8, len(b))])
 	}
 	if len(b) < 1000 {
-		t.Errorf("PDFが小さすぎます: %d bytes", len(b))
+		t.Errorf("PDF too small: %d bytes", len(b))
 	}
 }
 
@@ -59,6 +59,6 @@ func TestMeasurer_PositiveWidth(t *testing.T) {
 		t.Fatal(err)
 	}
 	if w := m.Measure("山田太郎", 10); w <= 0 {
-		t.Errorf("文字幅は正であるべき: %f", w)
+		t.Errorf("character width should be positive: %f", w)
 	}
 }

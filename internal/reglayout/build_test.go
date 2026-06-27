@@ -31,7 +31,7 @@ func TestBuild_SinglePage(t *testing.T) {
 		t.Fatalf("pages = %d, want 1", len(pages))
 	}
 	if dashedEdges(pages[0]) < 4 {
-		t.Errorf("1枚目に受付破線枠(4辺)が無い: %d", dashedEdges(pages[0]))
+		t.Errorf("page 1 missing receipt box (4 edges): %d", dashedEdges(pages[0]))
 	}
 }
 
@@ -43,16 +43,16 @@ func TestBuild_Paginates(t *testing.T) {
 	}
 	// 受付破線枠は1枚目のみ
 	if dashedEdges(pages[0]) < 4 {
-		t.Errorf("1枚目に受付枠が無い")
+		t.Errorf("page 1 missing receipt box")
 	}
 	for i := 1; i < len(pages); i++ {
 		if dashedEdges(pages[i]) != 0 {
-			t.Errorf("%d枚目に受付枠が残っている", i+1)
+			t.Errorf("page %d still has a receipt box", i+1)
 		}
 	}
 	// 全不動産が描画される(不動産番号ラベル数の合計)
 	if got := countLabel(pages, "不動産番号"); got != n {
-		t.Errorf("不動産番号ラベル = %d, want %d", got, n)
+		t.Errorf("property-number labels = %d, want %d", got, n)
 	}
 	// 全要素がページ内
 	assertWithinPage(t, pages)
@@ -85,7 +85,7 @@ func assertWithinPage(t *testing.T, pages []scene.Scene) {
 	for _, p := range pages {
 		for _, l := range p.Labels {
 			if l.Y < 0 || l.Y > p.Height {
-				t.Errorf("ラベルがページ外: y=%.1f text=%q", l.Y, l.Text)
+				t.Errorf("label out of page: y=%.1f text=%q", l.Y, l.Text)
 			}
 		}
 	}

@@ -47,3 +47,22 @@ func GenerateFromJSON(data []byte, opt Options) ([]byte, error) {
 	}
 	return Generate(a, opt)
 }
+
+// bunkatsu.Certificateを検証し遺産分割協議証明書PDFを生成(相続人ごとに1ページ)
+func GenerateCertificate(c bunkatsu.Certificate, opt Options) ([]byte, error) {
+	if err := c.Validate(); err != nil {
+		return nil, err
+	}
+	st := bunkatsulayout.DefaultStyle()
+	st.Era = opt.Era
+	return render.ToPDFMulti(bunkatsulayout.BuildCertificate(c, st))
+}
+
+// JSONを解釈し協議証明書PDFを生成
+func GenerateCertificateFromJSON(data []byte, opt Options) ([]byte, error) {
+	c, err := bunkatsuinput.DecodeCertificate(data)
+	if err != nil {
+		return nil, err
+	}
+	return GenerateCertificate(c, opt)
+}

@@ -29,6 +29,11 @@ func newServer() *mcp.Server {
 	}, handleBunkatsu)
 
 	mcp.AddTool(s, &mcp.Tool{
+		Name:        "generate_division_certificate",
+		Description: "遺産分割協議証明書(相続人ごとに1ページの個別書面型)のPDFを生成しファイルパスを返す。被相続人・取得者・共同相続人を渡すと、各相続人が取得を証明する書面を全員分の連続ページで出力する(住所欄は手書き用に空欄)。" + disclaimer,
+	}, handleCertificate)
+
+	mcp.AddTool(s, &mcp.Tool{
 		Name:        "calculate_registration_tax",
 		Description: "相続登記の登録免許税を計算する(課税標準の合算・端数処理・免税措置の文言)。免税は自動適用せず、対象になり得る土地は注意のみ示す。" + disclaimer,
 	}, handleTax)

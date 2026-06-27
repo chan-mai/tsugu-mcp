@@ -16,7 +16,7 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(samples) == 0 {
-		t.Fatal("bunkatsu サンプルが見つかりません")
+		t.Fatal("no bunkatsu samples found")
 	}
 	for _, path := range samples {
 		t.Run(filepath.Base(path), func(t *testing.T) {
@@ -26,7 +26,7 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 			}
 			pdf, err := agreement.GenerateFromJSON(data, agreement.DefaultOptions())
 			if err != nil {
-				t.Fatalf("生成に失敗: %v", err)
+				t.Fatalf("generation failed: %v", err)
 			}
 			if !bytes.HasPrefix(pdf, []byte("%PDF")) {
 				t.Errorf("not a PDF")
@@ -38,6 +38,20 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 func TestGenerateFromJSON_Invalid(t *testing.T) {
 	_, err := agreement.GenerateFromJSON([]byte(`{"decedent":{"name":"甲"}}`), agreement.DefaultOptions())
 	if err == nil {
-		t.Fatal("検証エラーが返るべき")
+		t.Fatal("expected a validation error")
+	}
+}
+
+func TestGenerateCertificateFromJSON_Sample(t *testing.T) {
+	data, err := os.ReadFile("../testdata/certificate_sample.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	pdf, err := agreement.GenerateCertificateFromJSON(data, agreement.DefaultOptions())
+	if err != nil {
+		t.Fatalf("generation failed: %v", err)
+	}
+	if !bytes.HasPrefix(pdf, []byte("%PDF")) {
+		t.Error("not a PDF")
 	}
 }

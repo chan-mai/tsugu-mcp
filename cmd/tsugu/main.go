@@ -26,7 +26,7 @@ func main() {
 
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: tsugu <chart|touki|bunkatsu> -in <json> -out <pdf> [-era wareki|both|seireki]")
+		return fmt.Errorf("usage: tsugu <chart|touki|bunkatsu|certificate> -in <json> -out <pdf> [-era wareki|both|seireki]")
 	}
 	switch args[0] {
 	case "chart":
@@ -35,8 +35,10 @@ func run(args []string) error {
 		return runTouki(args[1:])
 	case "bunkatsu":
 		return runBunkatsu(args[1:])
+	case "certificate":
+		return runCertificate(args[1:])
 	default:
-		return fmt.Errorf("unknown subcommand: %q (chart|touki|bunkatsu)", args[0])
+		return fmt.Errorf("unknown subcommand: %q (chart|touki|bunkatsu|certificate)", args[0])
 	}
 }
 
@@ -82,6 +84,22 @@ func runBunkatsu(args []string) error {
 		return err
 	}
 	pdf, err := agreement.GenerateFromJSON(data, agreement.Options{Era: era})
+	if err != nil {
+		return err
+	}
+	return writeOutput(out, pdf)
+}
+
+func runCertificate(args []string) error {
+	in, out, era, err := parseFlags("certificate", args)
+	if err != nil {
+		return err
+	}
+	data, err := readInput(in)
+	if err != nil {
+		return err
+	}
+	pdf, err := agreement.GenerateCertificateFromJSON(data, agreement.Options{Era: era})
 	if err != nil {
 		return err
 	}

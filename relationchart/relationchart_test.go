@@ -16,7 +16,7 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(samples) == 0 {
-		t.Fatal("サンプルJSONが見つかりません")
+		t.Fatal("no sample JSON found")
 	}
 	for _, path := range samples {
 		t.Run(filepath.Base(path), func(t *testing.T) {
@@ -26,10 +26,10 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 			}
 			pdf, err := relationchart.GenerateFromJSON(data, relationchart.DefaultOptions())
 			if err != nil {
-				t.Fatalf("生成に失敗: %v", err)
+				t.Fatalf("generation failed: %v", err)
 			}
 			if !bytes.HasPrefix(pdf, []byte("%PDF")) {
-				t.Errorf("PDFになっていません")
+				t.Errorf("not a PDF")
 			}
 		})
 	}
@@ -39,6 +39,6 @@ func TestGenerateFromJSON_InvalidReturnsError(t *testing.T) {
 	// 死亡日のない被相続人→Validateでエラー
 	_, err := relationchart.GenerateFromJSON([]byte(`{"decedent":{"name":"甲"}}`), relationchart.DefaultOptions())
 	if err == nil {
-		t.Fatal("検証エラーが返るべき")
+		t.Fatal("expected a validation error")
 	}
 }

@@ -16,7 +16,7 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(samples) == 0 {
-		t.Fatal("touki サンプルが見つかりません")
+		t.Fatal("no touki samples found")
 	}
 	for _, path := range samples {
 		t.Run(filepath.Base(path), func(t *testing.T) {
@@ -26,10 +26,10 @@ func TestGenerateFromJSON_Samples(t *testing.T) {
 			}
 			pdf, err := registration.GenerateFromJSON(data, registration.DefaultOptions())
 			if err != nil {
-				t.Fatalf("生成に失敗: %v", err)
+				t.Fatalf("generation failed: %v", err)
 			}
 			if !bytes.HasPrefix(pdf, []byte("%PDF")) {
-				t.Errorf("PDFになっていません")
+				t.Errorf("not a PDF")
 			}
 		})
 	}
@@ -39,6 +39,6 @@ func TestGenerateFromJSON_Invalid(t *testing.T) {
 	// 申請人・不動産なし → Validate でエラー
 	_, err := registration.GenerateFromJSON([]byte(`{"registry":"東京法務局"}`), registration.DefaultOptions())
 	if err == nil {
-		t.Fatal("検証エラーが返るべき")
+		t.Fatal("expected a validation error")
 	}
 }

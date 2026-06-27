@@ -44,7 +44,7 @@ func TestBuild_Pages(t *testing.T) {
 	}
 	pages := Build(a, DefaultStyle())
 	if len(pages) == 0 {
-		t.Fatal("ページが生成されない")
+		t.Fatal("no pages generated")
 	}
 	for _, p := range pages {
 		for _, l := range p.Labels {

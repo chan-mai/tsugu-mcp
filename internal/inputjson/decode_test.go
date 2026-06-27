@@ -25,27 +25,27 @@ func TestDecode_Valid(t *testing.T) {
 		t.Errorf("deathDate = %v", doc.Decedent.DeathDate)
 	}
 	if doc.Spouse == nil || doc.Spouse.Outcome != family.OutcomeInherit {
-		t.Errorf("spouse outcome 解釈に失敗: %+v", doc.Spouse)
+		t.Errorf("spouse outcome failed to parse: %+v", doc.Spouse)
 	}
 	if len(doc.Children) != 1 || len(doc.Children[0].Descendants) != 1 {
-		t.Fatalf("子孫ツリーの構築に失敗: %+v", doc.Children)
+		t.Fatalf("descendant tree failed to build: %+v", doc.Children)
 	}
 	if doc.Children[0].Outcome != family.OutcomeInherit { // "相続" の別名
-		t.Errorf("和文 outcome 解釈に失敗: %v", doc.Children[0].Outcome)
+		t.Errorf("Japanese outcome failed to parse: %v", doc.Children[0].Outcome)
 	}
 }
 
 func TestDecode_BadDate(t *testing.T) {
 	_, err := Decode([]byte(`{"decedent": {"name": "甲", "deathDate": "2025-13-40"}}`))
 	if err == nil {
-		t.Fatal("不正な日付でエラーになるべき")
+		t.Fatal("expected error for invalid date")
 	}
 }
 
 func TestDecode_UnknownOutcome(t *testing.T) {
 	_, err := Decode([]byte(`{"decedent": {"name": "甲", "deathDate": "2025-01-01"}, "spouse": {"name": "乙", "outcome": "???"}}`))
 	if err == nil {
-		t.Fatal("不明な outcome でエラーになるべき")
+		t.Fatal("expected error for unknown outcome")
 	}
 }
 
@@ -55,6 +55,6 @@ func TestDecode_EmptyDeathDateIsAlive(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	if doc.Children[0].DeathDate != nil {
-		t.Errorf("死亡日未指定は存命(nil)であるべき")
+		t.Errorf("missing death date should mean alive (nil)")
 	}
 }
