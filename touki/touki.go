@@ -8,8 +8,9 @@ import "tsugu-mcp/ymd"
 type PropertyKind int
 
 const (
-	Land     PropertyKind = iota // 土地
-	Building                     // 建物
+	Land        PropertyKind = iota // 土地
+	Building                        // 建物
+	Condominium                     // 区分建物(マンション)
 )
 
 // 原因(数次相続で複数)
@@ -35,22 +36,37 @@ type Applicant struct {
 	Contact   bool // 連絡先電話を表示する代表者
 }
 
-// 不動産の表示(土地または建物)
+// 敷地権の表示(区分建物)
+type LandRight struct {
+	Symbol      string // 符号
+	LocationLot string // 所在及び地番
+	Category    string // 地目
+	Area        string // 地積
+	RightType   string // 敷地権の種類
+	RightShare  string // 敷地権の割合
+}
+
+// 不動産の表示(土地・建物・区分建物)
 type Property struct {
 	Kind     PropertyKind
 	Number   string // 不動産番号
-	Location string // 所在
+	Location string // 所在(区分建物では一棟の建物の所在)
 
 	// 土地
 	LotNumber    string // 地番
 	LandCategory string // 地目
 	Area         string // 地積
 
-	// 建物
+	// 建物・区分建物の専有部分
 	HouseNumber  string // 家屋番号
 	BuildingType string // 種類
 	Structure    string // 構造
 	FloorArea    string // 床面積
+
+	// 区分建物
+	BuildingName string      // 一棟の建物の名称
+	UnitName     string      // 専有部分の建物の名称
+	LandRights   []LandRight // 敷地権の表示
 }
 
 // 登記申請書1件分の入力一式(登記の目的=所有権移転は固定のため持たない)

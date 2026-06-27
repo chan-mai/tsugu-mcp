@@ -34,6 +34,10 @@ func (a Application) Validate() error {
 			if p.Location == "" || p.HouseNumber == "" || p.FloorArea == "" {
 				errs = append(errs, fmt.Errorf("不動産[%d](建物): location, houseNumber and floorArea are required", i))
 			}
+		case Condominium:
+			if p.Location == "" || p.HouseNumber == "" || p.FloorArea == "" {
+				errs = append(errs, fmt.Errorf("不動産[%d](区分建物): location, houseNumber and floorArea are required", i))
+			}
 		}
 	}
 

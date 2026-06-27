@@ -82,19 +82,31 @@ type toukiApplicant struct {
 	Contact   bool   `json:"contact,omitempty" jsonschema:"連絡先表を付す代表者なら true"`
 }
 
+type landRight struct {
+	Symbol      string `json:"symbol,omitempty" jsonschema:"符号"`
+	LocationLot string `json:"locationLot,omitempty" jsonschema:"所在及び地番"`
+	Category    string `json:"category,omitempty" jsonschema:"地目"`
+	Area        string `json:"area,omitempty" jsonschema:"地積(平方メートルは自動付与)"`
+	RightType   string `json:"rightType,omitempty" jsonschema:"敷地権の種類(例 所有権)"`
+	RightShare  string `json:"rightShare,omitempty" jsonschema:"敷地権の割合(例 1000分の35)"`
+}
+
 type toukiProperty struct {
-	Kind         string `json:"kind" jsonschema:"land(土地) または building(建物)"`
-	Number       string `json:"number,omitempty" jsonschema:"不動産番号"`
-	Location     string `json:"location" jsonschema:"所在"`
-	LotNumber    string `json:"lotNumber,omitempty" jsonschema:"地番(土地)"`
-	LandCategory string `json:"landCategory,omitempty" jsonschema:"地目(土地)"`
-	Area         string `json:"area,omitempty" jsonschema:"地積(土地。平方メートルは自動付与)"`
-	HouseNumber  string `json:"houseNumber,omitempty" jsonschema:"家屋番号(建物)"`
-	BuildingType string `json:"buildingType,omitempty" jsonschema:"種類(建物)"`
-	Structure    string `json:"structure,omitempty" jsonschema:"構造(建物)"`
-	FloorArea    string `json:"floorArea,omitempty" jsonschema:"床面積(建物)"`
-	Value        int    `json:"value,omitempty" jsonschema:"固定資産評価額(円)。指定すると登録免許税を自動計算"`
-	Exemption    string `json:"exemption,omitempty" jsonschema:"免税 none|small_value|intermediate(登録免許税の自動計算時)"`
+	Kind         string      `json:"kind" jsonschema:"land(土地) / building(建物) / condominium(区分建物)"`
+	Number       string      `json:"number,omitempty" jsonschema:"不動産番号"`
+	Location     string      `json:"location" jsonschema:"所在(区分建物では一棟の建物の所在)"`
+	LotNumber    string      `json:"lotNumber,omitempty" jsonschema:"地番(土地)"`
+	LandCategory string      `json:"landCategory,omitempty" jsonschema:"地目(土地)"`
+	Area         string      `json:"area,omitempty" jsonschema:"地積(土地。平方メートルは自動付与)"`
+	HouseNumber  string      `json:"houseNumber,omitempty" jsonschema:"家屋番号(建物・区分建物の専有部分)"`
+	BuildingType string      `json:"buildingType,omitempty" jsonschema:"種類(建物・区分建物)"`
+	Structure    string      `json:"structure,omitempty" jsonschema:"構造(建物・区分建物)"`
+	FloorArea    string      `json:"floorArea,omitempty" jsonschema:"床面積(建物・区分建物)"`
+	BuildingName string      `json:"buildingName,omitempty" jsonschema:"一棟の建物の名称(区分建物)"`
+	UnitName     string      `json:"unitName,omitempty" jsonschema:"専有部分の建物の名称(区分建物。例 301号)"`
+	LandRights   []landRight `json:"landRights,omitempty" jsonschema:"敷地権の表示(区分建物)"`
+	Value        int         `json:"value,omitempty" jsonschema:"固定資産評価額(円)。指定すると登録免許税を自動計算"`
+	Exemption    string      `json:"exemption,omitempty" jsonschema:"免税 none|small_value|intermediate(登録免許税の自動計算時)"`
 }
 
 type toukiDecedent struct {

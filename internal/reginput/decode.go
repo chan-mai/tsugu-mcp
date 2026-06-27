@@ -46,16 +46,28 @@ type applicant struct {
 }
 
 type property struct {
-	Kind         string `json:"kind"`
-	Number       string `json:"number"`
-	Location     string `json:"location"`
-	LotNumber    string `json:"lotNumber"`
-	LandCategory string `json:"landCategory"`
-	Area         string `json:"area"`
-	HouseNumber  string `json:"houseNumber"`
-	BuildingType string `json:"buildingType"`
-	Structure    string `json:"structure"`
-	FloorArea    string `json:"floorArea"`
+	Kind         string      `json:"kind"`
+	Number       string      `json:"number"`
+	Location     string      `json:"location"`
+	LotNumber    string      `json:"lotNumber"`
+	LandCategory string      `json:"landCategory"`
+	Area         string      `json:"area"`
+	HouseNumber  string      `json:"houseNumber"`
+	BuildingType string      `json:"buildingType"`
+	Structure    string      `json:"structure"`
+	FloorArea    string      `json:"floorArea"`
+	BuildingName string      `json:"buildingName"`
+	UnitName     string      `json:"unitName"`
+	LandRights   []landRight `json:"landRights"`
+}
+
+type landRight struct {
+	Symbol      string `json:"symbol"`
+	LocationLot string `json:"locationLot"`
+	Category    string `json:"category"`
+	Area        string `json:"area"`
+	RightType   string `json:"rightType"`
+	RightShare  string `json:"rightShare"`
 }
 
 // JSONをtouki.Applicationへ変換、書式エラーは項目名付きで連結返却(意味的検証はtouki.Validateの責務)
@@ -94,7 +106,7 @@ func Decode(data []byte) (touki.Application, error) {
 		})
 	}
 	for i, p := range d.Properties {
-		app.Properties = append(app.Properties, touki.Property{
+		prop := touki.Property{
 			Kind:         parseKind(fmt.Sprintf("properties[%d].kind", i), p.Kind, &errs),
 			Number:       p.Number,
 			Location:     p.Location,
@@ -105,7 +117,20 @@ func Decode(data []byte) (touki.Application, error) {
 			BuildingType: p.BuildingType,
 			Structure:    p.Structure,
 			FloorArea:    p.FloorArea,
-		})
+			BuildingName: p.BuildingName,
+			UnitName:     p.UnitName,
+		}
+		for _, lr := range p.LandRights {
+			prop.LandRights = append(prop.LandRights, touki.LandRight{
+				Symbol:      lr.Symbol,
+				LocationLot: lr.LocationLot,
+				Category:    lr.Category,
+				Area:        lr.Area,
+				RightType:   lr.RightType,
+				RightShare:  lr.RightShare,
+			})
+		}
+		app.Properties = append(app.Properties, prop)
 	}
 
 	return app, errors.Join(errs...)
@@ -125,8 +150,10 @@ func parseKind(field, s string, errs *[]error) touki.PropertyKind {
 		return touki.Land
 	case "building", "建物":
 		return touki.Building
+	case "condominium", "区分建物":
+		return touki.Condominium
 	default:
-		*errs = append(*errs, fmt.Errorf("%s: unknown kind: %q (land|building)", field, s))
+		*errs = append(*errs, fmt.Errorf("%s: unknown kind: %q (land|building|condominium)", field, s))
 		return touki.Land
 	}
 }

@@ -1,0 +1,23 @@
+{
+  "decedent": { "name": "山田 太郎" },
+  "causes": [ { "date": "2024-06-15", "text": "相続" } ],
+  "applicants": [ { "name": "山田 一郎", "address": "東京都新宿区西新宿二丁目2番2号" } ],
+  "attachments": ["登記原因証明情報", "住所証明情報"],
+  "registry": "東京法務局",
+  "properties": [
+    {
+      "kind": "condominium",
+      "number": "1234567890123",
+      "location": "東京都千代田区一番町23番地",
+      "buildingName": "一番町マンション",
+      "houseNumber": "一番町23番の301",
+      "unitName": "301号",
+      "buildingType": "居宅",
+      "structure": "鉄骨造1階建",
+      "floorArea": "3階部分 60.12平方メートル",
+      "landRights": [
+        { "symbol": "1", "locationLot": "東京都千代田区一番町23番", "category": "宅地", "area": "500.00", "rightType": "所有権", "rightShare": "1000分の35" }
+      ]
+    }
+  ]
+}

@@ -232,42 +232,85 @@ func (b *builder) checkbox(x, y float64, checked bool) float64 {
 
 // --- 不動産ブロック ---
 
-func (b *builder) property(p touki.Property) {
-	rows := propertyRows(p)
-	blockH := float64(len(rows))*b.st.LineH + b.st.BlockGap
-	b.flow(blockH)
-
-	x := b.st.MarginX + b.st.PropIndent
-	valX := x + b.st.labelW() + b.st.ValueGap
-	for _, r := range rows {
-		b.body(x, b.y, justify(r[0], b.st.LabelChars))
-		b.body(valX, b.y, r[1])
-		b.y += b.st.LineH
-	}
-	b.y += b.st.BlockGap
+// 不動産表示の1行(見出し・字下げ小項目に対応)
+type propRow struct {
+	Label  string
+	Value  string
+	Header bool // セクション見出し(値なし)
+	Sub    bool // 字下げ小項目(区分建物)
 }
 
-func propertyRows(p touki.Property) [][2]string {
-	rows := [][2]string{
-		{"不動産番号", p.Number},
-		{"所在", p.Location},
+func (b *builder) property(p touki.Property) {
+	st := b.st
+	rows := propertyRows(p)
+	blockH := float64(len(rows))*st.LineH + st.BlockGap
+	b.flow(blockH)
+
+	baseX := st.MarginX + st.PropIndent
+	valX := baseX + st.labelW() + st.ValueGap
+	subX := baseX + 1.5*st.em()
+	subValX := subX + 7*st.em()
+	for _, r := range rows {
+		switch {
+		case r.Header:
+			b.body(baseX, b.y, r.Label)
+		case r.Sub:
+			b.body(subX, b.y, justify(r.Label, 6))
+			b.body(subValX, b.y, r.Value)
+		default:
+			b.body(baseX, b.y, justify(r.Label, st.LabelChars))
+			b.body(valX, b.y, r.Value)
+		}
+		b.y += st.LineH
 	}
+	b.y += st.BlockGap
+}
+
+func propertyRows(p touki.Property) []propRow {
 	switch p.Kind {
 	case touki.Building:
-		rows = append(rows,
-			[2]string{"家屋番号", p.HouseNumber},
-			[2]string{"種類", p.BuildingType},
-			[2]string{"構造", p.Structure},
-			[2]string{"床面積", p.FloorArea},
-		)
+		return []propRow{
+			{Label: "不動産番号", Value: p.Number},
+			{Label: "所在", Value: p.Location},
+			{Label: "家屋番号", Value: p.HouseNumber},
+			{Label: "種類", Value: p.BuildingType},
+			{Label: "構造", Value: p.Structure},
+			{Label: "床面積", Value: p.FloorArea},
+		}
+	case touki.Condominium:
+		rows := []propRow{
+			{Label: "不動産番号", Value: p.Number},
+			{Label: "一棟の建物の表示", Header: true},
+			{Label: "所在", Value: p.Location, Sub: true},
+			{Label: "建物の名称", Value: p.BuildingName, Sub: true},
+			{Label: "専有部分の建物の表示", Header: true},
+			{Label: "家屋番号", Value: p.HouseNumber, Sub: true},
+			{Label: "建物の名称", Value: p.UnitName, Sub: true},
+			{Label: "種類", Value: p.BuildingType, Sub: true},
+			{Label: "構造", Value: p.Structure, Sub: true},
+			{Label: "床面積", Value: p.FloorArea, Sub: true},
+			{Label: "敷地権の表示", Header: true},
+		}
+		for _, lr := range p.LandRights {
+			rows = append(rows,
+				propRow{Label: "符号", Value: lr.Symbol, Sub: true},
+				propRow{Label: "所在及び地番", Value: lr.LocationLot, Sub: true},
+				propRow{Label: "地目", Value: lr.Category, Sub: true},
+				propRow{Label: "地積", Value: area(lr.Area), Sub: true},
+				propRow{Label: "敷地権の種類", Value: lr.RightType, Sub: true},
+				propRow{Label: "敷地権の割合", Value: lr.RightShare, Sub: true},
+			)
+		}
+		return rows
 	default: // Land
-		rows = append(rows,
-			[2]string{"地番", p.LotNumber},
-			[2]string{"地目", p.LandCategory},
-			[2]string{"地積", area(p.Area)},
-		)
+		return []propRow{
+			{Label: "不動産番号", Value: p.Number},
+			{Label: "所在", Value: p.Location},
+			{Label: "地番", Value: p.LotNumber},
+			{Label: "地目", Value: p.LandCategory},
+			{Label: "地積", Value: area(p.Area)},
+		}
 	}
-	return rows
 }
 
 // --- 整形ヘルパ ---

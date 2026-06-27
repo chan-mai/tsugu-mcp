@@ -147,7 +147,7 @@ func autoFillTax(doc *toukiDoc) string {
 // 不動産の種別をregtaxのland|buildingへ正規化
 func normalizeKind(k string) string {
 	switch k {
-	case "building", "建物":
+	case "building", "建物", "condominium", "区分建物":
 		return "building"
 	default:
 		return "land"
