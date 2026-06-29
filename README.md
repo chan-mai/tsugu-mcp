@@ -37,6 +37,7 @@
 ```sh
 go install github.com/chan-mai/tsugu-mcp/cmd/tsugu-mcp@latest
 ```
+またはソースからビルドすることもできます。
 
 ```sh
 git clone https://github.com/chan-mai/tsugu-mcp
