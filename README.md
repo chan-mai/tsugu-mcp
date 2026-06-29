@@ -26,6 +26,17 @@
 - 登録免許税の計算(合算や端数処理、免税の文言)
 - 申請義務の期限の算定と相続人申告登記の案内
 
+## 出力サンプル
+
+`testdata`のサンプルJSONから生成したPDFの1ページ目です。
+
+<p>
+  <img src="docs/images/chart.png" alt="相続関係説明図" width="240">
+  <img src="docs/images/bunkatsu.png" alt="遺産分割協議書" width="240">
+  <img src="docs/images/certificate.png" alt="遺産分割協議証明書" width="240">
+  <img src="docs/images/touki.png" alt="相続登記申請書" width="240">
+</p>
+
 ## クイックスタート(LLMと使う / recommended)
 
 相続手続きが初めてなら、この使い方がいちばん手軽です。Claude等のMCPクライアントに登録して、対話しながら準備を進めます。
