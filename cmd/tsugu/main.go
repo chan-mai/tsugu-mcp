@@ -12,9 +12,9 @@ import (
 	"io"
 	"os"
 
-	"tsugu-mcp/agreement"
-	"tsugu-mcp/registration"
-	"tsugu-mcp/relationchart"
+	"github.com/chan-mai/tsugu-mcp/agreement"
+	"github.com/chan-mai/tsugu-mcp/registration"
+	"github.com/chan-mai/tsugu-mcp/relationchart"
 )
 
 func main() {

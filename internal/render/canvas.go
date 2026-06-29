@@ -5,7 +5,7 @@ package render
 import (
 	"math"
 
-	"tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
 )
 
 // 描画バックエンドの抽象(差し替え・テスト可能、座標mm・フォントpt)

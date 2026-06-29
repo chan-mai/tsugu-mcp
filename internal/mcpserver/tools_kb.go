@@ -8,8 +8,8 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"tsugu-mcp/internal/docguide"
-	"tsugu-mcp/internal/regtax"
+	"github.com/chan-mai/tsugu-mcp/internal/docguide"
+	"github.com/chan-mai/tsugu-mcp/internal/regtax"
 )
 
 const disclaimer = "【免責】本ツールは本人申請の準備を支援する情報提供であり法的助言ではありません。税額・必要書類は参考情報で、個別事案の正確性・最新性は保証しません。"

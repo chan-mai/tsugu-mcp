@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"tsugu-mcp/bunkatsu"
-	"tsugu-mcp/internal/scene"
-	"tsugu-mcp/internal/wareki"
-	"tsugu-mcp/touki"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/bunkatsu"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/touki"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 const ptToMM = 25.4 / 72.0

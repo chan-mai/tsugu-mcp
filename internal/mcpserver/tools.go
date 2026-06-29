@@ -9,8 +9,8 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"tsugu-mcp/registration"
-	"tsugu-mcp/relationchart"
+	"github.com/chan-mai/tsugu-mcp/registration"
+	"github.com/chan-mai/tsugu-mcp/relationchart"
 )
 
 // era文字列を表記スタイルへ変換(chart/touki共通)

@@ -5,8 +5,8 @@ import (
 
 	"github.com/signintech/gopdf"
 
-	"tsugu-mcp/assets"
-	"tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/assets"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
 )
 
 const fontName = "ipaexg"

@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"tsugu-mcp/family"
-	"tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/family"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
 )
 
 func date(y, m, d int) family.Date { return family.Date{Year: y, Month: m, Day: d} }

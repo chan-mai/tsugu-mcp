@@ -3,11 +3,11 @@
 package relationchart
 
 import (
-	"tsugu-mcp/family"
-	"tsugu-mcp/internal/inputjson"
-	"tsugu-mcp/internal/layout"
-	"tsugu-mcp/internal/render"
-	"tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/family"
+	"github.com/chan-mai/tsugu-mcp/internal/inputjson"
+	"github.com/chan-mai/tsugu-mcp/internal/layout"
+	"github.com/chan-mai/tsugu-mcp/internal/render"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
 )
 
 // 日付の表記形式

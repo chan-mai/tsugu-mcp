@@ -3,11 +3,11 @@
 package agreement
 
 import (
-	"tsugu-mcp/bunkatsu"
-	"tsugu-mcp/internal/bunkatsuinput"
-	"tsugu-mcp/internal/bunkatsulayout"
-	"tsugu-mcp/internal/render"
-	"tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/bunkatsu"
+	"github.com/chan-mai/tsugu-mcp/internal/bunkatsuinput"
+	"github.com/chan-mai/tsugu-mcp/internal/bunkatsulayout"
+	"github.com/chan-mai/tsugu-mcp/internal/render"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
 )
 
 // 日付の表記形式

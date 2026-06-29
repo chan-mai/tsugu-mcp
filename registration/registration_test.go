@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"tsugu-mcp/registration"
+	"github.com/chan-mai/tsugu-mcp/registration"
 )
 
 // testdataの登記申請書サンプルが公開API経由でPDF化されるか確認(end-to-end)

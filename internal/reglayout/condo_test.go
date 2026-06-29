@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"tsugu-mcp/touki"
+	"github.com/chan-mai/tsugu-mcp/touki"
 )
 
 func TestProperty_Condominium(t *testing.T) {

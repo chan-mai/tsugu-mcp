@@ -7,10 +7,10 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"tsugu-mcp/internal/casepattern"
-	"tsugu-mcp/internal/notification"
-	"tsugu-mcp/internal/shares"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/internal/casepattern"
+	"github.com/chan-mai/tsugu-mcp/internal/notification"
+	"github.com/chan-mai/tsugu-mcp/internal/shares"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 // --- 法定相続分の算定 ---

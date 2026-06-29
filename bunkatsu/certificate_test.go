@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 func okCertificate() Certificate {

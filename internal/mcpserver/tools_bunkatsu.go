@@ -6,7 +6,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"tsugu-mcp/agreement"
+	"github.com/chan-mai/tsugu-mcp/agreement"
 )
 
 type bunkatsuDecedent struct {

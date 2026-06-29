@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 func TestGuide_PreEnforcement(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
 )
 
 // 呼び出し回数を記録するフェイクCanvas

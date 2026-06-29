@@ -30,9 +30,13 @@
 
 相続手続きが初めてなら、この使い方がいちばん手軽です。Claude等のMCPクライアントに登録して、対話しながら準備を進めます。
 
-### 1. ビルド
+### 1. 入手
 
-[Go](https://go.dev/dl/) 1.25以降が必要です。
+[Go](https://go.dev/dl/) 1.25以降が必要です。実行ファイルは`$(go env GOPATH)/bin/tsugu-mcp`に置かれます。
+
+```sh
+go install github.com/chan-mai/tsugu-mcp/cmd/tsugu-mcp@latest
+```
 
 ```sh
 git clone https://github.com/chan-mai/tsugu-mcp
@@ -42,7 +46,7 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 
 ### 2. クライアントに登録
 
-Claude Desktopなら設定ファイル、Claude Codeなら`claude mcp add`等で、ビルドした実行ファイルを登録します。
+Claude Desktopなら設定ファイル、Claude Codeなら`claude m cp add`等で、実行ファイルの絶対パスを登録します。
 
 ```json
 {
@@ -113,7 +117,17 @@ go build -o tsugu ./cmd/tsugu
 
 ## ライブラリとして使う
 
+```sh
+go get github.com/chan-mai/tsugu-mcp
+```
+
 ```go
+import (
+	"github.com/chan-mai/tsugu-mcp/agreement"
+	"github.com/chan-mai/tsugu-mcp/registration"
+	"github.com/chan-mai/tsugu-mcp/relationchart"
+)
+
 // 相続関係説明図
 pdf, err := relationchart.GenerateFromJSON(chartJSON, relationchart.DefaultOptions())
 // 遺産分割協議書

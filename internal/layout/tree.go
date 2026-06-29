@@ -1,6 +1,6 @@
 package layout
 
-import "tsugu-mcp/family"
+import "github.com/chan-mai/tsugu-mcp/family"
 
 // 描画用の家系ツリー(primary=血統側、spouse=配偶者、children=次世代)
 type treeNode struct {

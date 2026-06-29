@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"tsugu-mcp/touki"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/touki"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 func okAgreement() Agreement {

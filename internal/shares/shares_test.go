@@ -3,7 +3,7 @@ package shares
 import (
 	"testing"
 
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 func got(r Result) map[string]string {

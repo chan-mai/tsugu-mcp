@@ -1,6 +1,6 @@
 package layout
 
-import "tsugu-mcp/internal/scene"
+import "github.com/chan-mai/tsugu-mcp/internal/scene"
 
 // 枠なし人物欄(anchor=続柄+氏名行、その中心Yで関係線接続)
 type card struct {

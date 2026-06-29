@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 // 遺産分割協議証明書(相続人ごとに各自が取得を証明する個別書面型)

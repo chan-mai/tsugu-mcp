@@ -3,8 +3,8 @@
 package reglayout
 
 import (
-	"tsugu-mcp/internal/scene"
-	"tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
 )
 
 // pt→mm換算(1pt=1/72inch)

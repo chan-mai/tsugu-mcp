@@ -3,7 +3,7 @@ package inputjson
 import (
 	"testing"
 
-	"tsugu-mcp/family"
+	"github.com/chan-mai/tsugu-mcp/family"
 )
 
 func TestDecode_Valid(t *testing.T) {

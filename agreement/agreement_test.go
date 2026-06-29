@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"tsugu-mcp/agreement"
+	"github.com/chan-mai/tsugu-mcp/agreement"
 )
 
 // testdataの遺産分割協議書サンプルが公開API経由でPDF化されるか確認(end-to-end)

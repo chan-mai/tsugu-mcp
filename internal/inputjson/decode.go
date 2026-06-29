@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"tsugu-mcp/family"
+	"github.com/chan-mai/tsugu-mcp/family"
 )
 
 type document struct {

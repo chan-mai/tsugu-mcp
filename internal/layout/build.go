@@ -3,9 +3,9 @@
 package layout
 
 import (
-	"tsugu-mcp/family"
-	"tsugu-mcp/internal/scene"
-	"tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/family"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
 )
 
 type layouter struct {

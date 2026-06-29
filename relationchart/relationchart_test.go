@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"tsugu-mcp/relationchart"
+	"github.com/chan-mai/tsugu-mcp/relationchart"
 )
 
 // testdata各サンプルが公開API経由でPDF化されるか確認(end-to-end)

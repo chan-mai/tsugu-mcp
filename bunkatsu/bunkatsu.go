@@ -3,8 +3,8 @@
 package bunkatsu
 
 import (
-	"tsugu-mcp/touki"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/touki"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 // 被相続人(協議書は死亡日+住所+氏名で特定)

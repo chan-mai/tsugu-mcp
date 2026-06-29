@@ -1,4 +1,4 @@
-module tsugu-mcp
+module github.com/chan-mai/tsugu-mcp
 
 go 1.25.0
 

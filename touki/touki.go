@@ -2,7 +2,7 @@
 // 描画・JSON・PDF非依存の純粋データ構造
 package touki
 
-import "tsugu-mcp/ymd"
+import "github.com/chan-mai/tsugu-mcp/ymd"
 
 // 不動産の種別
 type PropertyKind int

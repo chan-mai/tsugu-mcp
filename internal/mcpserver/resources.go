@@ -6,7 +6,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"tsugu-mcp/docs/knowledge"
+	"github.com/chan-mai/tsugu-mcp/docs/knowledge"
 )
 
 const knowledgeScheme = "knowledge://"

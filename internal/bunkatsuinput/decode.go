@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"strings"
 
-	"tsugu-mcp/bunkatsu"
-	"tsugu-mcp/touki"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/bunkatsu"
+	"github.com/chan-mai/tsugu-mcp/touki"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 type document struct {

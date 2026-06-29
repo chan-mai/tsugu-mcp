@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"tsugu-mcp/bunkatsu"
-	"tsugu-mcp/internal/scene"
-	"tsugu-mcp/internal/wareki"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/bunkatsu"
+	"github.com/chan-mai/tsugu-mcp/internal/scene"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 // 遺産分割協議証明書の描画指示を構築(共同相続人ごとに1ページ生成)

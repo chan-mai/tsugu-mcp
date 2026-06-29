@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"tsugu-mcp/bunkatsu"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/bunkatsu"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 func certInput() bunkatsu.Certificate {

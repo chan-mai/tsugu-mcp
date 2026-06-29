@@ -1,6 +1,6 @@
 package layout
 
-import "tsugu-mcp/internal/wareki"
+import "github.com/chan-mai/tsugu-mcp/internal/wareki"
 
 // pt→mm換算(1pt=1/72inch)
 const ptToMM = 25.4 / 72.0

@@ -4,8 +4,8 @@ package notification
 import (
 	"fmt"
 
-	"tsugu-mcp/internal/wareki"
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 // 案内条件

@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"tsugu-mcp/internal/mcpserver"
+	"github.com/chan-mai/tsugu-mcp/internal/mcpserver"
 )
 
 func main() {

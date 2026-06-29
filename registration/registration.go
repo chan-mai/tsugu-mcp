@@ -3,11 +3,11 @@
 package registration
 
 import (
-	"tsugu-mcp/internal/reginput"
-	"tsugu-mcp/internal/reglayout"
-	"tsugu-mcp/internal/render"
-	"tsugu-mcp/internal/wareki"
-	"tsugu-mcp/touki"
+	"github.com/chan-mai/tsugu-mcp/internal/reginput"
+	"github.com/chan-mai/tsugu-mcp/internal/reglayout"
+	"github.com/chan-mai/tsugu-mcp/internal/render"
+	"github.com/chan-mai/tsugu-mcp/internal/wareki"
+	"github.com/chan-mai/tsugu-mcp/touki"
 )
 
 // 日付の表記形式

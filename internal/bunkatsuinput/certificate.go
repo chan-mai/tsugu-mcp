@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"tsugu-mcp/bunkatsu"
+	"github.com/chan-mai/tsugu-mcp/bunkatsu"
 )
 
 type certDocument struct {

@@ -5,7 +5,7 @@ package shares
 import (
 	"math/big"
 
-	"tsugu-mcp/ymd"
+	"github.com/chan-mai/tsugu-mcp/ymd"
 )
 
 // 血族相続人(子・直系尊属・兄弟姉妹のいずれか)
