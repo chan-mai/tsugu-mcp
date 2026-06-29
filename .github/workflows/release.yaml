@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Resolve CalVer tag
+        id: ver
+        run: |
+          base=$(date +'%Y.%m.%d')
+          tag=$base
+          n=1
+          while gh api "repos/${{ github.repository }}/git/ref/tags/$tag" >/dev/null 2>&1; do
+            tag="$base.$n"
+            n=$((n + 1))
+          done
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        run: |
+          gh release create "${{ steps.ver.outputs.tag }}" \
+            --target "${{ github.sha }}" \
+            --title "${{ steps.ver.outputs.tag }}" \
+            --generate-notes
