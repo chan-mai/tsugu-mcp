@@ -18,6 +18,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
       - name: Resolve CalVer tag
         id: ver
         run: |
@@ -30,9 +35,22 @@ jobs:
           done
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
+      - name: Build MCP binaries
+        run: |
+          ver="${{ steps.ver.outputs.tag }}"
+          mkdir -p dist
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64; do
+            os="${target%/*}"; arch="${target#*/}"
+            ext=""; [ "$os" = "windows" ] && ext=".exe"
+            GOOS="$os" GOARCH="$arch" CGO_ENABLED=0 \
+              go build -trimpath -o "dist/tsugu-mcp_${ver}_${os}_${arch}${ext}" ./cmd/tsugu-mcp
+          done
+          ls -la dist
+
       - name: Create release
         run: |
           gh release create "${{ steps.ver.outputs.tag }}" \
             --target "${{ github.sha }}" \
             --title "${{ steps.ver.outputs.tag }}" \
-            --generate-notes
+            --generate-notes \
+            dist/*
