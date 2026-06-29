@@ -9,6 +9,8 @@ import (
 // fallbackはVCS情報が取れないときの基準バージョン
 const fallback = "0.0.0"
 
+var jst = time.FixedZone("JST", 9*60*60)
+
 func Version() string {
 	if d := commitDate(); d != "" {
 		return d
@@ -28,7 +30,7 @@ func commitDate() string {
 	for _, s := range settings() {
 		if s.Key == "vcs.time" {
 			if t, err := time.Parse(time.RFC3339, s.Value); err == nil {
-				return t.Format("2006.01.02")
+				return t.In(jst).Format("2006.01.02")
 			}
 		}
 	}
