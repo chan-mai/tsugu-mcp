@@ -13,6 +13,7 @@ import (
 	"os"
 
 	"github.com/chan-mai/tsugu-mcp/agreement"
+	"github.com/chan-mai/tsugu-mcp/internal/buildinfo"
 	"github.com/chan-mai/tsugu-mcp/registration"
 	"github.com/chan-mai/tsugu-mcp/relationchart"
 )
@@ -26,9 +27,12 @@ func main() {
 
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: tsugu <chart|touki|bunkatsu|certificate> -in <json> -out <pdf> [-era wareki|both|seireki]")
+		return fmt.Errorf("usage: tsugu <chart|touki|bunkatsu|certificate|version> -in <json> -out <pdf> [-era wareki|both|seireki]")
 	}
 	switch args[0] {
+	case "version", "-version", "--version", "-v":
+		fmt.Println("tsugu", buildinfo.String())
+		return nil
 	case "chart":
 		return runChart(args[1:])
 	case "touki":

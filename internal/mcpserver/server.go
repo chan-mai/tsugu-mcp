@@ -5,13 +5,13 @@ import (
 	"context"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-)
 
-const version = "0.1.0"
+	"github.com/chan-mai/tsugu-mcp/internal/buildinfo"
+)
 
 // ツールを登録したMCPサーバーを構築
 func newServer() *mcp.Server {
-	s := mcp.NewServer(&mcp.Implementation{Name: "tsugu-mcp", Version: version}, nil)
+	s := mcp.NewServer(&mcp.Implementation{Name: "tsugu-mcp", Version: buildinfo.String()}, nil)
 
 	mcp.AddTool(s, &mcp.Tool{
 		Name:        "generate_relationship_chart",
