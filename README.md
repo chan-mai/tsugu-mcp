@@ -2,7 +2,7 @@
 
 相続登記(不動産の名義変更)を自分で準備するためのMCPです。LLMと対話しながら、相続関係説明図や遺産分割協議書、登記申請書といった書類のPDFを作れます。必要書類の案内や法定相続分、登録免許税、申請義務の期限も、その場で確認できます。
 
-使い方はCLIとGoライブラリ、MCPサーバーの3通りです。日付は既定で和暦表示です(西暦併記にも切り替えられます)。
+使い方はCLIとGoライブラリ、MCPサーバの3通りです。日付は既定で和暦表示です(西暦併記にも切り替えられます)。
 
 > [!IMPORTANT]
 > 本ツールは法的助言ではなく、本人申請の準備を支援する情報提供です。税額や必要書類、様式は参考情報で、個別事案の正確性や最新性は保証しません。生成したPDFは下書きとして扱い、提出前に、登記事項証明書との一致、戸籍の連続性、評価額の最新年度を必ず確認してください。複雑な事案や判断に迷う点は、司法書士や弁護士、管轄法務局へご相談ください。
@@ -47,7 +47,7 @@ go build -o tsugu-mcp ./cmd/tsugu-mcp
 
 ### 2. クライアントに登録
 
-Claude Desktopなら設定ファイル、Claude Codeなら`claude m cp add`等で、実行ファイルの絶対パスを登録します。
+Claude Desktopなら設定ファイル、Claude Codeなら`claude mcp add`等で、実行ファイルの絶対パスを登録します。
 
 ```json
 {
@@ -211,6 +211,12 @@ pdf, err := registration.GenerateFromJSON(toukiJSON, registration.DefaultOptions
 - 各不動産に`value`(固定資産評価額。単位は円)を渡すと、課税価格と登録免許税を自動で計算します。渡さなければ`taxValue`と`registrationTax`の文字列をそのまま描きます。
 - `contact: true`の申請人には、氏名ふりがなや生年月日、メールの枠表と連絡先電話を付します。
 
+## ライセンス
+
+本ツールのコードは[AGPL-3.0](LICENSE)です。改変して配布する場合や、ネットワーク越しにサービスとして提供する場合は、利用者へソースコードを開示する義務があります(AGPL 13条)。MCPサーバーやWebサービスとして公開するときは特に注意してください。
+
+同梱するIPAexゴシックは[IPAフォントライセンスv1.0](assets/fonts/IPA_Font_License_Agreement_v1.0.txt)で、埋め込みと再配布ができます。
+
 ---
 
 # 開発者向け
@@ -250,7 +256,7 @@ flowchart TB
   chart["relationchart 系: 相続関係説明図(family / inputjson / layout)"]
   touki["registration 系: 相続登記申請書(touki / reginput / reglayout)"]
   bunkatsu["agreement 系: 遺産分割協議書と協議証明書(bunkatsu / bunkatsuinput / bunkatsulayout)"]
-  mcp["cmd/tsugu-mcp と internal/mcpserver: MCPサーバー(stdio)"]
+  mcp["cmd/tsugu-mcp と internal/mcpserver: MCPサーバ(stdio)"]
   knowledge["docs/knowledge と internal/regtax, internal/docguide: 知識ベースと登録免許税計算、必要書類ナビ"]
 
   chart --> scene
