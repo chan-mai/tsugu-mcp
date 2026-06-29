@@ -43,12 +43,21 @@
 
 ### 1. 入手
 
-[Go](https://go.dev/dl/) 1.25以降が必要です。実行ファイルは`$(go env GOPATH)/bin/tsugu-mcp`に置かれます。
+[リリースページ](https://github.com/chan-mai/tsugu-mcp/releases/latest)からOSとCPUに合うビルド済みバイナリ(`tsugu-mcp_<version>_<os>_<arch>`、Windowsは`.exe`)をダウンロードする方法です。macOSとLinuxはダウンロード後に実行権限を付けます。
+
+```sh
+chmod +x tsugu-mcp_*_darwin_arm64
+```
+
+macOSで未署名バイナリがブロックされる場合は`xattr -dr com.apple.quarantine <file>`で解除できます。
+
+Goがあるなら`go install`でも入り、実行ファイルは`$(go env GOPATH)/bin/tsugu-mcp`に置かれます。
 
 ```sh
 go install github.com/chan-mai/tsugu-mcp/cmd/tsugu-mcp@latest
 ```
-またはソースからビルドすることもできます。
+
+ソースからビルドすることもできます。
 
 ```sh
 git clone https://github.com/chan-mai/tsugu-mcp
