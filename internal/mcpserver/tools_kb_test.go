@@ -31,8 +31,8 @@ func TestHandleTax_ExampleA(t *testing.T) {
 	if res.IsError {
 		t.Fatalf("unexpected error: %+v", res.Content)
 	}
-	if out.Tax != 71_100 {
-		t.Errorf("Tax = %d, want 71100", out.Tax)
+	if out.Result.Tax != 71_100 {
+		t.Errorf("Tax = %d, want 71100", out.Result.Tax)
 	}
 	if !strings.Contains(toolText(t, res), "免責") {
 		t.Error("missing disclaimer in text")
@@ -47,7 +47,7 @@ func TestHandleDocs_Siblings(t *testing.T) {
 	if res.IsError {
 		t.Fatalf("unexpected error: %+v", res.Content)
 	}
-	if len(out.Categories) == 0 {
+	if len(out.Result.Categories) == 0 {
 		t.Fatal("no categories")
 	}
 	text := toolText(t, res)

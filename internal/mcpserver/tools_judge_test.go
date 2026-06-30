@@ -17,11 +17,11 @@ func TestHandleShares(t *testing.T) {
 	if res.IsError {
 		t.Fatalf("unexpected error: %+v", res.Content)
 	}
-	if out.Sum != "1" {
-		t.Errorf("sum = %q, want 1", out.Sum)
+	if out.Result.Sum != "1" {
+		t.Errorf("sum = %q, want 1", out.Result.Sum)
 	}
 	frac := map[string]string{}
-	for _, s := range out.Shares {
+	for _, s := range out.Result.Shares {
 		frac[s.Name] = s.Fraction
 	}
 	if frac["花子"] != "1/2" || frac["一郎"] != "1/4" || frac["二郎"] != "1/4" {
@@ -42,7 +42,7 @@ func TestHandleShares_Substitution(t *testing.T) {
 		t.Fatalf("unexpected: %v %+v", err, res.Content)
 	}
 	frac := map[string]string{}
-	for _, s := range out.Shares {
+	for _, s := range out.Result.Shares {
 		frac[s.Name] = s.Fraction
 	}
 	if frac["D"] != "1/8" || frac["E"] != "1/8" || frac["A"] != "1/4" {
@@ -55,11 +55,11 @@ func TestHandlePattern(t *testing.T) {
 	if err != nil || res.IsError {
 		t.Fatalf("unexpected: %v %+v", err, res.Content)
 	}
-	if out.Primary.Key != "B" {
-		t.Errorf("key = %q, want B", out.Primary.Key)
+	if out.Result.Primary.Key != "B" {
+		t.Errorf("key = %q, want B", out.Result.Primary.Key)
 	}
-	if len(out.Modifiers) == 0 || !strings.Contains(strings.Join(out.Modifiers, " "), "相続放棄") {
-		t.Errorf("missing renunciation modifier: %v", out.Modifiers)
+	if len(out.Result.Modifiers) == 0 || !strings.Contains(strings.Join(out.Result.Modifiers, " "), "相続放棄") {
+		t.Errorf("missing renunciation modifier: %v", out.Result.Modifiers)
 	}
 }
 
@@ -68,8 +68,8 @@ func TestHandleNotify(t *testing.T) {
 	if err != nil || res.IsError {
 		t.Fatalf("unexpected: %v %+v", err, res.Content)
 	}
-	if !strings.HasPrefix(out.Deadline, "2028-06-15") {
-		t.Errorf("deadline = %q, want 2028-06-15", out.Deadline)
+	if !strings.HasPrefix(out.Result.Deadline, "2028-06-15") {
+		t.Errorf("deadline = %q, want 2028-06-15", out.Result.Deadline)
 	}
 }
 
