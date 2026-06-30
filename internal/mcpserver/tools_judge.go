@@ -49,10 +49,10 @@ type sharesToolInput struct {
 	Siblings   []shareHeir `json:"siblings,omitempty" jsonschema:"兄弟姉妹(第3順位)"`
 }
 
-func handleShares(_ context.Context, _ *mcp.CallToolRequest, in sharesToolInput) (*mcp.CallToolResult, shares.Result, error) {
+func handleShares(_ context.Context, _ *mcp.CallToolRequest, in sharesToolInput) (*mcp.CallToolResult, kbOutput[shares.Result], error) {
 	dd, err := parseDateOpt(in.DeathDate)
 	if err != nil {
-		return textErr(err), shares.Result{}, nil
+		return textErr(err), kbOutput[shares.Result]{}, nil
 	}
 	r := shares.Calculate(shares.Input{
 		DeathDate:  dd,
@@ -61,7 +61,7 @@ func handleShares(_ context.Context, _ *mcp.CallToolRequest, in sharesToolInput)
 		Ascendants: toHeirs(in.Ascendants),
 		Siblings:   toHeirs(in.Siblings),
 	})
-	return textOK(formatShares(r)), r, nil
+	return textOK(formatShares(r)), withAsOf(r), nil
 }
 
 func toHeirs(hs []shareHeir) []shares.Heir {
@@ -105,12 +105,12 @@ type patternToolInput struct {
 	SpousalResidence bool   `json:"spousalResidence,omitempty" jsonschema:"配偶者居住権の設定があればtrue"`
 }
 
-func handlePattern(_ context.Context, _ *mcp.CallToolRequest, in patternToolInput) (*mcp.CallToolResult, casepattern.Result, error) {
+func handlePattern(_ context.Context, _ *mcp.CallToolRequest, in patternToolInput) (*mcp.CallToolResult, kbOutput[casepattern.Result], error) {
 	r := casepattern.Select(casepattern.Input{
 		Method: in.Method, BequestToHeir: in.BequestToHeir, Multilevel: in.Multilevel,
 		Substitution: in.Substitution, Renunciation: in.Renunciation, SpousalResidence: in.SpousalResidence,
 	})
-	return textOK(formatPattern(r)), r, nil
+	return textOK(formatPattern(r)), withAsOf(r), nil
 }
 
 func formatPattern(r casepattern.Result) string {
@@ -135,17 +135,17 @@ type notifyToolInput struct {
 	KnownDate string `json:"knownDate,omitempty" jsonschema:"相続開始・取得を知った日 YYYY-MM-DD(空なら死亡日)"`
 }
 
-func handleNotify(_ context.Context, _ *mcp.CallToolRequest, in notifyToolInput) (*mcp.CallToolResult, notification.Result, error) {
+func handleNotify(_ context.Context, _ *mcp.CallToolRequest, in notifyToolInput) (*mcp.CallToolResult, kbOutput[notification.Result], error) {
 	dd, err := parseDateOpt(in.DeathDate)
 	if err != nil {
-		return textErr(err), notification.Result{}, nil
+		return textErr(err), kbOutput[notification.Result]{}, nil
 	}
 	kd, err := parseDateOpt(in.KnownDate)
 	if err != nil {
-		return textErr(err), notification.Result{}, nil
+		return textErr(err), kbOutput[notification.Result]{}, nil
 	}
 	r := notification.Guide(notification.Input{DeathDate: dd, KnownDate: kd})
-	return textOK(formatNotify(r)), r, nil
+	return textOK(formatNotify(r)), withAsOf(r), nil
 }
 
 func formatNotify(r notification.Result) string {
